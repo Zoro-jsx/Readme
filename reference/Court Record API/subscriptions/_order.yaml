@@ -1,0 +1,5 @@
+- post_subscriptions-initiate
+- post_subscriptions-verify
+- get_subscriptions
+- get_subscriptions-me
+- delete_subscriptions-me

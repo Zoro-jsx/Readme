@@ -1,0 +1,4 @@
+- get_packages
+- post_packages
+- put_packages-id
+- delete_packages-id
