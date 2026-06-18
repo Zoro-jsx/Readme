@@ -1,0 +1,6 @@
+- get_statistics-recent-case-search
+- delete_statistics-recent-case-search
+- delete_statistics-recent-case-search-id
+- get_statistics-api-summary
+- get_statistics-usage-trends
+- get_statistics-subscription-status
