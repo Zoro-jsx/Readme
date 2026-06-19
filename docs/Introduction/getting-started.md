@@ -15,16 +15,13 @@ metadata:
 
 This guide walks through everything required to make your first authenticated API call to the Court Record Platform. The process takes fewer than five minutes.
 
-**Environments**
+**Base URL**
 
-The platform operates two environments. Use the sandbox for integration development and testing before moving to production.
+All API requests are made to the following base URL:
 
-| Environment | Base URL |
-| :--- | :--- |
-| Production | `https://api.courtrecordplatform.in/api/v1` |
-| Sandbox | `https://sandbox.courtrecordplatform.in/api/v1` |
-
-All endpoints, request formats, and response schemas are identical across both environments. Credits consumed in the sandbox do not deduct from your production balance.
+```
+https://api.courtrecordplatform.in/api/v1
+```
 
 **Creating an API Key**
 
