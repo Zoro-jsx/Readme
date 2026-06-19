@@ -8,46 +8,68 @@ hidden: false
 metadata:
   robots: index
 ---
-## 1. Rate Limiting
 
-Endpoints are limited based on your client IP address and your authentication method:
+# Rate Limits & Metering
 
-- **Authenticated (JWT or API Key) requests**: Rate limits are higher and scale based on your subscription tier (e.g. 60 requests per minute).
-- **Public / Anonymous requests**: Tight limits are applied to prevent scraping of public lists (e.g. 5 requests per minute).
+To ensure platform reliability, fair resource allocation, and system stability, the Court Record Platform API enforces rate limits (throttling) and credits-based metering.
 
-When you exceed the rate limit, the API returns a `429 Too Many Requests` error with the standard `ErrorResponse` payload.
+---
 
-***
+## 1. Throttling & Rate Limits
+
+Rate limits are enforced at the API Gateway level based on your client IP address and authenticated credentials.
+
+### Throttle Limits
+
+| Client Category | Rate Limit | Burst Limit | Description |
+| :--- | :--- | :--- | :--- |
+| **Anonymous / Public Routes** | 5 requests / min | 10 requests | Tight limits applied to prevent scraping of public information. |
+| **Standard API Keys / JWT** | 60 requests / min | 120 requests | Default programmatic tier for general integrations. |
+| **Enterprise Tiers** | 300 requests / min | 600 requests | Customized limits for high-volume background scrapers. |
+
+When a client exceeds these limits, the gateway returns an **HTTP 429 Too Many Requests** error.
+
+---
 
 ## 2. API Metering & Credit Pools
 
-programmatic calls using API keys consume credits from your wallet. Credits are divided into two pools:
+Programmatic operations consume credits from your organization's wallet balance. Credits are divided into two distinct pools:
 
 1. **Subscription Credits**: Monthly credits granted with your active subscription plan. These expire at the end of the billing cycle.
-2. **Purchased Credits (Top-ups)**: Credits purchased as a pay-as-you-go top-up. These do not expire and are consumed only after your Subscription Credits are fully exhausted.
+2. **Purchased Credits (Top-ups)**: Credits purchased as a pay-as-you-go top-up. These **do not expire** and are consumed only after your Subscription Credits are fully exhausted.
 
-***
+### Credit Cost Schedule
 
-## 3. Credit Consumption Rates
+| Endpoint Code | Rate (Credits) | Target Endpoint | Description |
+| :--- | :--- | :--- | :--- |
+| **`SEARCH_CASE`** | `5` | `POST /api/v1/case-search` | Querying lists of cases by petitioner, respondent, or advocate. |
+| **`GET_CASE_DETAIL`** | `10` | `POST /api/v1/case-detail/searchByCnr` | Fetching the full historical case record by CNR number. |
+| **`REFRESH_CASE`** | `15` | `POST /api/v1/case-refresh` | Enqueuing a worker to pull live scraping updates from eCourts. |
+| **`COURT_STRUCTURE`** | `1` | `GET /api/v1/court-structure` | Fetching static lists of states, districts, and complexes. |
 
-Each API endpoint code carries a different rate in credits per call. Here is the pricing schedule:
+---
 
-| Endpoint Code     | Rate (Credits) | Description                                                                     |
-| :---------------- | :------------- | :------------------------------------------------------------------------------ |
-| `SEARCH_CASE`     | `5`            | Querying the list of cases via `POST /case-search`.                             |
-| `GET_CASE_DETAIL` | `10`           | Retrieving full details of a specific case via `POST /case-detail/searchByCnr`. |
-| `REFRESH_CASE`    | `15`           | Requesting a live scrape and update of a case from eCourts.                     |
-| `COURT_STRUCTURE` | `1`            | Fetching court, complex, state, or district lists.                              |
+## 3. Rate Limit Response Headers
 
-***
+Each response contains headers to help you track your current rate limit usage:
 
-## Checking Your Balance
-
-To programmatically check your current credit balance and daily usage summary, query:
-
-```bash
-curl -X GET https://api.yourcompany.com/api/v1/wallet \
-  -H "Authorization: Bearer <your_api_key>"
+```http
+X-RateLimit-Limit: 60
+X-RateLimit-Remaining: 42
+X-RateLimit-Reset: 1718804700
 ```
 
-<br />
+* **`X-RateLimit-Limit`**: The maximum number of requests allowed in the current time window.
+* **`X-RateLimit-Remaining`**: The number of requests remaining in the current time window.
+* **`X-RateLimit-Reset`**: The Unix timestamp indicating when the current rate limit window resets.
+
+---
+
+## Best Practices
+
+To ensure uninterrupted service and minimize cost, we recommend incorporating the following patterns in your client application:
+
+1. **Implement Caching**: Cache static details (such as court structures and historical closed cases) in a local database or memory store (e.g. Redis) to avoid redundant requests.
+2. **Handle HTTP 429 Gracefully**: Check for HTTP 429 status codes and parse the `X-RateLimit-Reset` header.
+3. **Exponential Backoff**: When retrying failed requests, use an exponential backoff strategy with random jitter to avoid flooding the API Gateway.
+4. **Monitor Credit Balances**: Programmatically query `/api/v1/wallet` to check credit levels and set up alerts for when credits fall below a critical threshold.
