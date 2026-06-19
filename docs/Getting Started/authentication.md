@@ -9,41 +9,42 @@ metadata:
   robots: index
 ---
 
-# Authentication
+**Authentication**
 
-All programmatic requests to the Court Record Platform API are authenticated using **API Keys**. 
+All endpoints in the Court Record Platform API require authentication. Authentication is performed by including an API key in the `Authorization` header of every request.
 
----
-
-## 1. Authentication Header (API Keys)
-
-API Keys must be passed in the HTTP `Authorization` header as a Bearer token:
+**The Authorization Header**
 
 ```http
-Authorization: Bearer <api_key>
+Authorization: Bearer <your_api_key>
 ```
 
-### Example Request
+The API key is prefixed with `cr_live_` for production keys and `cr_test_` for sandbox keys. Including the full string — prefix and random characters — is required.
+
+**Example**
+
 ```bash
-curl -X POST https://api.yourcompany.com/api/v1/case-search \
-  -H "Authorization: Bearer cr_live_xyz789payg123456..." \
+curl -X POST https://api.courtrecordplatform.in/api/v1/case-detail/searchByCnr \
+  -H "Authorization: Bearer cr_live_abc123xyz789" \
   -H "Content-Type: application/json" \
-  -d '{
-    "petitioner": "Tata Motors",
-    "year": 2023
-  }'
+  -d '{ "cnrNumber": "MHPN010123456789" }'
 ```
 
----
+**Key Management**
 
-## 2. API Key Management
+API keys are created and managed through the Developer Portal under **Settings → API Keys**, or programmatically via the `/api-keys` endpoints. The table below summarises the available operations.
 
-API Keys can be generated, managed, rotated, and revoked directly within the user settings panel of the **Developer Portal Dashboard**:
+| Operation | Method | Endpoint |
+| :--- | :--- | :--- |
+| Create a key | `POST` | `/api-keys` |
+| List all keys | `GET` | `/api-keys` |
+| Get a key | `GET` | `/api-keys/{id}` |
+| Update name or scopes | `PATCH` | `/api-keys/{id}` |
+| Rotate a key | `POST` | `/api-keys/{id}/rotate` |
+| Revoke a key | `DELETE` | `/api-keys/{id}` |
 
-1. Log in to the Developer Portal.
-2. Navigate to **Settings > API Keys**.
-3. Click **Generate New Key**.
-4. Give it a descriptive name and select the required permission scopes (e.g., `cases:read`).
-5. Copy the plain key string immediately. It will only be shown once for security reasons.
+Rotating a key immediately invalidates the existing key and issues a replacement with identical configuration. The new plain key is returned in the rotation response and displayed only once.
 
-If an API Key is compromised, you can revoke or rotate it instantly via the dashboard to protect your wallet balance and data access.
+**Security Practices**
+
+Keep API keys out of source code and version control. Use environment variables or a dedicated secrets manager to inject keys at runtime. Assign each integration its own key with the minimum scopes needed for that integration. Revoke keys that are no longer in use and rotate keys periodically as part of routine security hygiene.
