@@ -11,69 +11,39 @@ metadata:
 
 # Authentication
 
-The Court Record Platform API supports two authentication mechanisms designed for different application architectures.
+All programmatic requests to the Court Record Platform API are authenticated using **API Keys**. 
 
 ---
 
-## 1. Web Portal Authentication (JWT Cookies)
-If you are building a frontend application that interacts with our user interface directly, authentication is handled via JSON Web Tokens (JWT) stored in HTTP-only, secure cookies (`accessToken` and `refreshToken`).
+## 1. Authentication Header (API Keys)
 
-* Cookies are automatically set upon a successful call to `/auth/login` or `/auth/verify-otp`.
-* Standard endpoints require the browser to automatically include these cookies on every request.
-* To check if your session is active, call:
-  ```bash
-  curl -X GET https://api.yourcompany.com/api/v1/auth/status
-  ```
-
----
-
-## 2. Programmatic Integrations (API Keys)
-If you are integrating our services into a background cron job, server-side system, or backend application, you should authenticate using an **API Key**.
-
-### Authorization Header Format
 API Keys must be passed in the HTTP `Authorization` header as a Bearer token:
 
 ```http
 Authorization: Bearer <api_key>
 ```
 
-#### Example Request
+### Example Request
 ```bash
-curl -X GET https://api.yourcompany.com/api/v1/wallet \
-  -H "Authorization: Bearer cr_live_xyz789payg123456..."
+curl -X POST https://api.yourcompany.com/api/v1/case-search \
+  -H "Authorization: Bearer cr_live_xyz789payg123456..." \
+  -H "Content-Type: application/json" \
+  -d '{
+    "petitioner": "Tata Motors",
+    "year": 2023
+  }'
 ```
 
 ---
 
-## API Key Management & Lifecycle
+## 2. API Key Management
 
-You can manage your API keys via our API key management endpoints:
+API Keys can be generated, managed, rotated, and revoked directly within the user settings panel of the **Developer Portal Dashboard**:
 
-### Generate a Key
-Generate a new API key by specifying a human-readable name and permissions scopes:
+1. Log in to the Developer Portal.
+2. Navigate to **Settings > API Keys**.
+3. Click **Generate New Key**.
+4. Give it a descriptive name and select the required permission scopes (e.g., `cases:read`).
+5. Copy the plain key string immediately. It will only be shown once for security reasons.
 
-```bash
-curl -X POST https://api.yourcompany.com/api/v1/api-keys \
-  -H "Authorization: Bearer <your_jwt_token>" \
-  -H "Content-Type: application/json" \
-  -d '{
-    "name": "Cron Job Search Key",
-    "scopes": ["cases:read"]
-  }'
-```
-
-### Revoke a Key
-If a key is leaked or no longer needed, you can delete it immediately to revoke access:
-
-```bash
-curl -X DELETE https://api.yourcompany.com/api/v1/api-keys/64b8f1a2c3d4e5f6a7b8c9d0 \
-  -H "Authorization: Bearer <your_jwt_token>"
-```
-
-### Rotate a Key
-To cycle a key (generate a new plain token while keeping the same configuration), call the rotate endpoint:
-
-```bash
-curl -X POST https://api.yourcompany.com/api/v1/api-keys/64b8f1a2c3d4e5f6a7b8c9d0/rotate \
-  -H "Authorization: Bearer <your_jwt_token>"
-```
+If an API Key is compromised, you can revoke or rotate it instantly via the dashboard to protect your wallet balance and data access.
