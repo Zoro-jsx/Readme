@@ -1,0 +1,5032 @@
+{
+  "openapi": "3.1.0",
+  "info": {
+    "title": "Court Record API",
+    "description": "REST API for the Court Record backend",
+    "version": "1.0.0"
+  },
+  "servers": [
+    {
+      "url": "/api/v1",
+      "description": "Version 1"
+    }
+  ],
+  "tags": [
+    {
+      "name": "v1",
+      "description": "Version 1 endpoints"
+    }
+  ],
+  "components": {
+    "securitySchemes": {
+      "bearerAuth": {
+        "type": "http",
+        "scheme": "bearer",
+        "bearerFormat": "JWT"
+      }
+    },
+    "schemas": {},
+    "parameters": {}
+  },
+  "paths": {
+    "/api-billing/credits": {
+      "get": {
+        "tags": [
+          "API Billing"
+        ],
+        "summary": "Get current user credit balance",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Credits balance fetched successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean",
+                      "example": true
+                    },
+                    "response": {
+                      "type": "object",
+                      "properties": {
+                        "subscriptionCredits": {
+                          "type": "number",
+                          "example": 450
+                        },
+                        "purchasedCredits": {
+                          "type": "number",
+                          "example": 200
+                        },
+                        "totalCredits": {
+                          "type": "number",
+                          "example": 650
+                        },
+                        "currency": {
+                          "type": "string",
+                          "example": "INR"
+                        }
+                      },
+                      "required": [
+                        "subscriptionCredits",
+                        "purchasedCredits",
+                        "totalCredits",
+                        "currency"
+                      ]
+                    }
+                  },
+                  "required": [
+                    "success",
+                    "response"
+                  ]
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean",
+                      "example": false
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Error message"
+                    }
+                  },
+                  "required": [
+                    "success",
+                    "message"
+                  ]
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api-billing/transactions": {
+      "get": {
+        "tags": [
+          "API Billing"
+        ],
+        "summary": "Get credit transaction history",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "schema": {
+              "type": "string",
+              "example": "50"
+            },
+            "required": false,
+            "name": "limit",
+            "in": "query"
+          },
+          {
+            "schema": {
+              "type": "string",
+              "example": "0"
+            },
+            "required": false,
+            "name": "skip",
+            "in": "query"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Transactions fetched successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean",
+                      "example": true
+                    },
+                    "response": {
+                      "type": "object",
+                      "properties": {
+                        "transactions": {
+                          "type": "array",
+                          "items": {
+                            "type": "object",
+                            "properties": {
+                              "_id": {
+                                "type": "string",
+                                "example": "64b8f1a2c3d4e5f6a7b8c9d0"
+                              },
+                              "userId": {
+                                "type": "string",
+                                "example": "64b8f1a2c3d4e5f6a7b8c9d1"
+                              },
+                              "amount": {
+                                "type": "number",
+                                "example": -100
+                              },
+                              "type": {
+                                "type": "string",
+                                "enum": [
+                                  "credit",
+                                  "debit"
+                                ],
+                                "example": "debit"
+                              },
+                              "pool": {
+                                "type": "string",
+                                "enum": [
+                                  "subscription",
+                                  "purchased"
+                                ],
+                                "example": "subscription"
+                              },
+                              "balanceAfter": {
+                                "type": "number",
+                                "example": 450
+                              },
+                              "description": {
+                                "type": "string",
+                                "example": "API call to SEARCH_CASE"
+                              },
+                              "createdAt": {
+                                "type": "string",
+                                "example": "2024-01-01T00:00:00.000Z"
+                              }
+                            },
+                            "required": [
+                              "_id",
+                              "userId",
+                              "amount",
+                              "type",
+                              "pool",
+                              "balanceAfter",
+                              "description",
+                              "createdAt"
+                            ]
+                          }
+                        },
+                        "total": {
+                          "type": "number",
+                          "example": 40
+                        },
+                        "limit": {
+                          "type": "number",
+                          "example": 50
+                        },
+                        "skip": {
+                          "type": "number",
+                          "example": 0
+                        }
+                      },
+                      "required": [
+                        "transactions",
+                        "total",
+                        "limit",
+                        "skip"
+                      ]
+                    }
+                  },
+                  "required": [
+                    "success",
+                    "response"
+                  ]
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean",
+                      "example": false
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Error message"
+                    }
+                  },
+                  "required": [
+                    "success",
+                    "message"
+                  ]
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api-billing/pricing": {
+      "get": {
+        "tags": [
+          "API Billing"
+        ],
+        "summary": "Get public endpoint pricing (subscriber vs PAYG)",
+        "responses": {
+          "200": {
+            "description": "Pricing rates fetched successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean",
+                      "example": true
+                    },
+                    "response": {
+                      "type": "object",
+                      "properties": {
+                        "pricing": {
+                          "type": "array",
+                          "items": {
+                            "type": "object",
+                            "properties": {
+                              "endpointCode": {
+                                "type": "string",
+                                "example": "SEARCH_CASE"
+                              },
+                              "paygRate": {
+                                "type": "number",
+                                "example": 5
+                              },
+                              "subscriberRate": {
+                                "type": "number",
+                                "example": 3.5
+                              },
+                              "discountPercent": {
+                                "type": "number",
+                                "example": 10
+                              },
+                              "currency": {
+                                "type": "string",
+                                "example": "INR"
+                              }
+                            },
+                            "required": [
+                              "endpointCode",
+                              "paygRate",
+                              "subscriberRate",
+                              "discountPercent",
+                              "currency"
+                            ]
+                          }
+                        },
+                        "subscriberRatesActive": {
+                          "type": "boolean",
+                          "example": true
+                        }
+                      },
+                      "required": [
+                        "pricing",
+                        "subscriberRatesActive"
+                      ]
+                    }
+                  },
+                  "required": [
+                    "success",
+                    "response"
+                  ]
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api-billing/plans": {
+      "get": {
+        "tags": [
+          "API Billing"
+        ],
+        "summary": "Get available subscription plans",
+        "responses": {
+          "200": {
+            "description": "Subscription plans fetched successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean",
+                      "example": true
+                    },
+                    "response": {
+                      "type": "object",
+                      "properties": {
+                        "plans": {
+                          "type": "array",
+                          "items": {
+                            "type": "object",
+                            "properties": {
+                              "_id": {
+                                "type": "string",
+                                "example": "64b8f1a2c3d4e5f6a7b8c9d3"
+                              },
+                              "planId": {
+                                "type": "string",
+                                "example": "professional"
+                              },
+                              "planName": {
+                                "type": "string",
+                                "example": "Professional Plan"
+                              },
+                              "priceInPaise": {
+                                "type": "number",
+                                "example": 99900
+                              },
+                              "monthlyCredits": {
+                                "type": "number",
+                                "example": 1000
+                              },
+                              "discountPercent": {
+                                "type": "number",
+                                "example": 15
+                              },
+                              "features": {
+                                "type": "array",
+                                "items": {
+                                  "type": "string"
+                                },
+                                "example": [
+                                  "Priority search",
+                                  "Bulk exports"
+                                ]
+                              }
+                            },
+                            "required": [
+                              "planId",
+                              "planName",
+                              "priceInPaise",
+                              "monthlyCredits",
+                              "discountPercent",
+                              "features"
+                            ]
+                          }
+                        }
+                      },
+                      "required": [
+                        "plans"
+                      ]
+                    }
+                  },
+                  "required": [
+                    "success",
+                    "response"
+                  ]
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api-billing/subscription": {
+      "get": {
+        "tags": [
+          "API Billing"
+        ],
+        "summary": "Get current user subscription status and details",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Subscription details fetched successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean",
+                      "example": true
+                    },
+                    "response": {
+                      "type": "object",
+                      "properties": {
+                        "subscription": {
+                          "type": [
+                            "object",
+                            "null"
+                          ],
+                          "properties": {
+                            "id": {
+                              "type": "string",
+                              "example": "64b8f1a2c3d4e5f6a7b8c9d4"
+                            },
+                            "planId": {
+                              "type": "string",
+                              "example": "professional"
+                            },
+                            "planName": {
+                              "type": "string",
+                              "example": "Professional Plan"
+                            },
+                            "priceInPaise": {
+                              "type": "number",
+                              "example": 99900
+                            },
+                            "monthlyCredits": {
+                              "type": "number",
+                              "example": 1000
+                            },
+                            "discountPercent": {
+                              "type": "number",
+                              "example": 15
+                            },
+                            "status": {
+                              "type": "string",
+                              "example": "active"
+                            },
+                            "currentPeriodStart": {
+                              "type": "string",
+                              "example": "2024-01-01T00:00:00.000Z"
+                            },
+                            "currentPeriodEnd": {
+                              "type": "string",
+                              "example": "2024-02-01T00:00:00.000Z"
+                            },
+                            "nextBillingDate": {
+                              "type": "string",
+                              "example": "2024-02-01T00:00:00.000Z"
+                            },
+                            "isAutoRenew": {
+                              "type": "boolean",
+                              "example": true
+                            }
+                          },
+                          "required": [
+                            "id",
+                            "planId",
+                            "planName",
+                            "priceInPaise",
+                            "monthlyCredits",
+                            "discountPercent",
+                            "status",
+                            "currentPeriodStart",
+                            "currentPeriodEnd",
+                            "nextBillingDate",
+                            "isAutoRenew"
+                          ]
+                        },
+                        "status": {
+                          "type": "string",
+                          "example": "PAYG"
+                        }
+                      },
+                      "required": [
+                        "subscription"
+                      ]
+                    }
+                  },
+                  "required": [
+                    "success",
+                    "response"
+                  ]
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean",
+                      "example": false
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Error message"
+                    }
+                  },
+                  "required": [
+                    "success",
+                    "message"
+                  ]
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api-billing/subscribe": {
+      "post": {
+        "tags": [
+          "API Billing"
+        ],
+        "summary": "Subscribe to a subscription plan",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "body": {
+                    "type": "object",
+                    "properties": {
+                      "planId": {
+                        "type": "string",
+                        "minLength": 1
+                      }
+                    },
+                    "required": [
+                      "planId"
+                    ]
+                  }
+                },
+                "required": [
+                  "body"
+                ]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Subscription activated successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean",
+                      "example": true
+                    },
+                    "response": {
+                      "type": "object",
+                      "properties": {
+                        "subscription": {
+                          "type": "object",
+                          "properties": {
+                            "id": {
+                              "type": "string",
+                              "example": "64b8f1a2c3d4e5f6a7b8c9d4"
+                            },
+                            "planName": {
+                              "type": "string",
+                              "example": "Professional Plan"
+                            },
+                            "status": {
+                              "type": "string",
+                              "example": "active"
+                            },
+                            "currentPeriodEnd": {
+                              "type": "string",
+                              "example": "2024-02-01T00:00:00.000Z"
+                            }
+                          },
+                          "required": [
+                            "id",
+                            "planName",
+                            "status",
+                            "currentPeriodEnd"
+                          ]
+                        }
+                      },
+                      "required": [
+                        "subscription"
+                      ]
+                    }
+                  },
+                  "required": [
+                    "success",
+                    "response"
+                  ]
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Validation error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean",
+                      "example": false
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Error message"
+                    }
+                  },
+                  "required": [
+                    "success",
+                    "message"
+                  ]
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean",
+                      "example": false
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Error message"
+                    }
+                  },
+                  "required": [
+                    "success",
+                    "message"
+                  ]
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Plan not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean",
+                      "example": false
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Error message"
+                    }
+                  },
+                  "required": [
+                    "success",
+                    "message"
+                  ]
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api-billing/cancel": {
+      "post": {
+        "tags": [
+          "API Billing"
+        ],
+        "summary": "Cancel the active subscription",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Subscription cancelled successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean",
+                      "example": true
+                    },
+                    "response": {
+                      "type": "object",
+                      "properties": {
+                        "subscription": {
+                          "type": "object",
+                          "properties": {
+                            "id": {
+                              "type": "string",
+                              "example": "64b8f1a2c3d4e5f6a7b8c9d4"
+                            },
+                            "status": {
+                              "type": "string",
+                              "example": "cancelled"
+                            }
+                          },
+                          "required": [
+                            "id",
+                            "status"
+                          ]
+                        }
+                      },
+                      "required": [
+                        "subscription"
+                      ]
+                    }
+                  },
+                  "required": [
+                    "success",
+                    "response"
+                  ]
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean",
+                      "example": false
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Error message"
+                    }
+                  },
+                  "required": [
+                    "success",
+                    "message"
+                  ]
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "No active subscription found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean",
+                      "example": false
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Error message"
+                    }
+                  },
+                  "required": [
+                    "success",
+                    "message"
+                  ]
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api-billing/prepay": {
+      "post": {
+        "tags": [
+          "API Billing"
+        ],
+        "summary": "Prepay for next subscription cycle",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Prepayment completed successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean",
+                      "example": true
+                    },
+                    "response": {
+                      "type": "object",
+                      "properties": {
+                        "subscription": {
+                          "type": "object",
+                          "properties": {
+                            "id": {
+                              "type": "string",
+                              "example": "64b8f1a2c3d4e5f6a7b8c9d4"
+                            },
+                            "currentPeriodEnd": {
+                              "type": "string",
+                              "example": "2024-03-01T00:00:00.000Z"
+                            },
+                            "nextBillingDate": {
+                              "type": "string",
+                              "example": "2024-03-01T00:00:00.000Z"
+                            }
+                          },
+                          "required": [
+                            "id",
+                            "currentPeriodEnd",
+                            "nextBillingDate"
+                          ]
+                        }
+                      },
+                      "required": [
+                        "subscription"
+                      ]
+                    }
+                  },
+                  "required": [
+                    "success",
+                    "response"
+                  ]
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean",
+                      "example": false
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Error message"
+                    }
+                  },
+                  "required": [
+                    "success",
+                    "message"
+                  ]
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "No active subscription found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean",
+                      "example": false
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Error message"
+                    }
+                  },
+                  "required": [
+                    "success",
+                    "message"
+                  ]
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api-billing/packages": {
+      "get": {
+        "tags": [
+          "API Billing"
+        ],
+        "summary": "Get available credit top-up packages",
+        "responses": {
+          "200": {
+            "description": "Top-up packages fetched successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean",
+                      "example": true
+                    },
+                    "response": {
+                      "type": "object",
+                      "properties": {
+                        "packages": {
+                          "type": "array",
+                          "items": {
+                            "type": "object",
+                            "properties": {
+                              "id": {
+                                "type": "string",
+                                "example": "64b8f1a2c3d4e5f6a7b8c9d6"
+                              },
+                              "name": {
+                                "type": "string",
+                                "example": "Starter Topup"
+                              },
+                              "description": {
+                                "type": "string",
+                                "example": "100 credits for testing"
+                              },
+                              "priceInPaise": {
+                                "type": "number",
+                                "example": 10000
+                              },
+                              "credits": {
+                                "type": "number",
+                                "example": 100
+                              },
+                              "currency": {
+                                "type": "string",
+                                "example": "INR"
+                              }
+                            },
+                            "required": [
+                              "id",
+                              "name",
+                              "description",
+                              "priceInPaise",
+                              "credits",
+                              "currency"
+                            ]
+                          }
+                        }
+                      },
+                      "required": [
+                        "packages"
+                      ]
+                    }
+                  },
+                  "required": [
+                    "success",
+                    "response"
+                  ]
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api-billing/topup": {
+      "post": {
+        "tags": [
+          "API Billing"
+        ],
+        "summary": "Purchase a top-up credit package",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {}
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Top-up purchased successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean",
+                      "example": true
+                    },
+                    "response": {
+                      "type": "object",
+                      "properties": {
+                        "transaction": {
+                          "type": "object",
+                          "properties": {
+                            "id": {
+                              "type": "string",
+                              "example": "64b8f1a2c3d4e5f6a7b8c9d8"
+                            },
+                            "type": {
+                              "type": "string",
+                              "example": "credit"
+                            },
+                            "amount": {
+                              "type": "number",
+                              "example": 100
+                            },
+                            "balanceAfter": {
+                              "type": "number",
+                              "example": 300
+                            },
+                            "description": {
+                              "type": "string",
+                              "example": "Top-up: Starter Topup"
+                            },
+                            "createdAt": {
+                              "type": "string",
+                              "example": "2024-01-01T00:00:00.000Z"
+                            }
+                          },
+                          "required": [
+                            "id",
+                            "type",
+                            "amount",
+                            "balanceAfter",
+                            "description",
+                            "createdAt"
+                          ]
+                        }
+                      },
+                      "required": [
+                        "transaction"
+                      ]
+                    }
+                  },
+                  "required": [
+                    "success",
+                    "response"
+                  ]
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Validation error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean",
+                      "example": false
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Error message"
+                    }
+                  },
+                  "required": [
+                    "success",
+                    "message"
+                  ]
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean",
+                      "example": false
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Error message"
+                    }
+                  },
+                  "required": [
+                    "success",
+                    "message"
+                  ]
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api-keys": {
+      "post": {
+        "tags": [
+          "API Keys"
+        ],
+        "summary": "Generate a new API key",
+        "description": "Creates an API key. Note: The `plainKey` is returned only once at creation.",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "body": {
+                    "type": "object",
+                    "properties": {
+                      "name": {
+                        "type": "string",
+                        "minLength": 1,
+                        "maxLength": 100
+                      },
+                      "scopes": {
+                        "type": "array",
+                        "items": {
+                          "type": "string"
+                        },
+                        "default": []
+                      },
+                      "expiresAt": {
+                        "type": "string"
+                      }
+                    },
+                    "required": [
+                      "name"
+                    ]
+                  }
+                },
+                "required": [
+                  "body"
+                ]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "API key generated successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean",
+                      "example": true
+                    },
+                    "response": {
+                      "type": "object",
+                      "properties": {
+                        "key": {
+                          "type": "object",
+                          "properties": {
+                            "id": {
+                              "type": "string",
+                              "example": "64b8f1a2c3d4e5f6a7b8c9d0"
+                            },
+                            "name": {
+                              "type": "string",
+                              "example": "Development Key"
+                            },
+                            "plainKey": {
+                              "type": "string",
+                              "example": "cr_live_abc123xyz789payg123456"
+                            },
+                            "keyPrefix": {
+                              "type": "string",
+                              "example": "cr_live_abc123"
+                            },
+                            "scopes": {
+                              "type": "array",
+                              "items": {
+                                "type": "string"
+                              },
+                              "example": [
+                                "cases:read"
+                              ]
+                            },
+                            "expiresAt": {
+                              "type": "string",
+                              "example": "2025-01-01T00:00:00.000Z"
+                            },
+                            "createdAt": {
+                              "type": "string",
+                              "example": "2024-01-01T00:00:00.000Z"
+                            }
+                          },
+                          "required": [
+                            "id",
+                            "name",
+                            "plainKey",
+                            "keyPrefix",
+                            "scopes",
+                            "createdAt"
+                          ]
+                        },
+                        "warning": {
+                          "type": "string",
+                          "example": "Store this key securely - it cannot be retrieved again"
+                        }
+                      },
+                      "required": [
+                        "key",
+                        "warning"
+                      ]
+                    }
+                  },
+                  "required": [
+                    "success",
+                    "response"
+                  ]
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Validation error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean",
+                      "example": false
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Error message"
+                    }
+                  },
+                  "required": [
+                    "success",
+                    "message"
+                  ]
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean",
+                      "example": false
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Error message"
+                    }
+                  },
+                  "required": [
+                    "success",
+                    "message"
+                  ]
+                }
+              }
+            }
+          }
+        }
+      },
+      "get": {
+        "tags": [
+          "API Keys"
+        ],
+        "summary": "List all API keys for current user",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "API keys list fetched successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean",
+                      "example": true
+                    },
+                    "response": {
+                      "type": "object",
+                      "properties": {
+                        "keys": {
+                          "type": "array",
+                          "items": {
+                            "type": "object",
+                            "properties": {
+                              "id": {
+                                "type": "string",
+                                "example": "64b8f1a2c3d4e5f6a7b8c9d0"
+                              },
+                              "name": {
+                                "type": "string",
+                                "example": "Development Key"
+                              },
+                              "keyPrefix": {
+                                "type": "string",
+                                "example": "cr_live_abc123"
+                              },
+                              "scopes": {
+                                "type": "array",
+                                "items": {
+                                  "type": "string"
+                                },
+                                "example": [
+                                  "cases:read"
+                                ]
+                              },
+                              "lastUsedAt": {
+                                "type": "string",
+                                "example": "2024-01-01T00:00:00.000Z"
+                              },
+                              "expiresAt": {
+                                "type": "string",
+                                "example": "2025-01-01T00:00:00.000Z"
+                              },
+                              "createdAt": {
+                                "type": "string",
+                                "example": "2024-01-01T00:00:00.000Z"
+                              },
+                              "isActive": {
+                                "type": "boolean",
+                                "example": true
+                              }
+                            },
+                            "required": [
+                              "id",
+                              "name",
+                              "keyPrefix",
+                              "scopes",
+                              "createdAt",
+                              "isActive"
+                            ]
+                          }
+                        }
+                      },
+                      "required": [
+                        "keys"
+                      ]
+                    }
+                  },
+                  "required": [
+                    "success",
+                    "response"
+                  ]
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean",
+                      "example": false
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Error message"
+                    }
+                  },
+                  "required": [
+                    "success",
+                    "message"
+                  ]
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api-keys/{id}": {
+      "get": {
+        "tags": [
+          "API Keys"
+        ],
+        "summary": "Get a specific API key",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "schema": {
+              "type": "string",
+              "pattern": "^[0-9a-fA-F]{24}$"
+            },
+            "required": true,
+            "name": "id",
+            "in": "path"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "API key fetched successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean",
+                      "example": true
+                    },
+                    "response": {
+                      "type": "object",
+                      "properties": {
+                        "key": {
+                          "type": "object",
+                          "properties": {
+                            "id": {
+                              "type": "string",
+                              "example": "64b8f1a2c3d4e5f6a7b8c9d0"
+                            },
+                            "name": {
+                              "type": "string",
+                              "example": "Development Key"
+                            },
+                            "keyPrefix": {
+                              "type": "string",
+                              "example": "cr_live_abc123"
+                            },
+                            "scopes": {
+                              "type": "array",
+                              "items": {
+                                "type": "string"
+                              },
+                              "example": [
+                                "cases:read"
+                              ]
+                            },
+                            "lastUsedAt": {
+                              "type": "string",
+                              "example": "2024-01-01T00:00:00.000Z"
+                            },
+                            "expiresAt": {
+                              "type": "string",
+                              "example": "2025-01-01T00:00:00.000Z"
+                            },
+                            "createdAt": {
+                              "type": "string",
+                              "example": "2024-01-01T00:00:00.000Z"
+                            },
+                            "isActive": {
+                              "type": "boolean",
+                              "example": true
+                            }
+                          },
+                          "required": [
+                            "id",
+                            "name",
+                            "keyPrefix",
+                            "scopes",
+                            "createdAt",
+                            "isActive"
+                          ]
+                        }
+                      },
+                      "required": [
+                        "key"
+                      ]
+                    }
+                  },
+                  "required": [
+                    "success",
+                    "response"
+                  ]
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean",
+                      "example": false
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Error message"
+                    }
+                  },
+                  "required": [
+                    "success",
+                    "message"
+                  ]
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "API key not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean",
+                      "example": false
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Error message"
+                    }
+                  },
+                  "required": [
+                    "success",
+                    "message"
+                  ]
+                }
+              }
+            }
+          }
+        }
+      },
+      "patch": {
+        "tags": [
+          "API Keys"
+        ],
+        "summary": "Update API key metadata",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "schema": {
+              "type": "string",
+              "pattern": "^[0-9a-fA-F]{24}$"
+            },
+            "required": true,
+            "name": "id",
+            "in": "path"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "params": {
+                    "type": "object",
+                    "properties": {
+                      "id": {
+                        "type": "string",
+                        "pattern": "^[0-9a-fA-F]{24}$"
+                      }
+                    },
+                    "required": [
+                      "id"
+                    ]
+                  },
+                  "body": {
+                    "type": "object",
+                    "properties": {
+                      "name": {
+                        "type": "string",
+                        "minLength": 1,
+                        "maxLength": 100
+                      },
+                      "scopes": {
+                        "type": "array",
+                        "items": {
+                          "type": "string"
+                        }
+                      }
+                    }
+                  }
+                },
+                "required": [
+                  "params",
+                  "body"
+                ]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "API key updated successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean",
+                      "example": true
+                    },
+                    "response": {
+                      "type": "object",
+                      "properties": {
+                        "key": {
+                          "type": "object",
+                          "properties": {
+                            "id": {
+                              "type": "string",
+                              "example": "64b8f1a2c3d4e5f6a7b8c9d0"
+                            },
+                            "name": {
+                              "type": "string",
+                              "example": "Development Key"
+                            },
+                            "scopes": {
+                              "type": "array",
+                              "items": {
+                                "type": "string"
+                              },
+                              "example": [
+                                "cases:read",
+                                "cases:write"
+                              ]
+                            }
+                          },
+                          "required": [
+                            "id",
+                            "name",
+                            "scopes"
+                          ]
+                        }
+                      },
+                      "required": [
+                        "key"
+                      ]
+                    }
+                  },
+                  "required": [
+                    "success",
+                    "response"
+                  ]
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Validation error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean",
+                      "example": false
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Error message"
+                    }
+                  },
+                  "required": [
+                    "success",
+                    "message"
+                  ]
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean",
+                      "example": false
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Error message"
+                    }
+                  },
+                  "required": [
+                    "success",
+                    "message"
+                  ]
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "API key not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean",
+                      "example": false
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Error message"
+                    }
+                  },
+                  "required": [
+                    "success",
+                    "message"
+                  ]
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "API Keys"
+        ],
+        "summary": "Revoke an API key",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "schema": {
+              "type": "string",
+              "pattern": "^[0-9a-fA-F]{24}$"
+            },
+            "required": true,
+            "name": "id",
+            "in": "path"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "API key revoked successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean",
+                      "example": true
+                    },
+                    "response": {
+                      "type": "object",
+                      "properties": {}
+                    }
+                  },
+                  "required": [
+                    "success",
+                    "response"
+                  ]
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean",
+                      "example": false
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Error message"
+                    }
+                  },
+                  "required": [
+                    "success",
+                    "message"
+                  ]
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "API key not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean",
+                      "example": false
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Error message"
+                    }
+                  },
+                  "required": [
+                    "success",
+                    "message"
+                  ]
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api-keys/{id}/rotate": {
+      "post": {
+        "tags": [
+          "API Keys"
+        ],
+        "summary": "Rotate an API key",
+        "description": "Revokes the current API key and generates a new one with the same config.",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "schema": {
+              "type": "string",
+              "pattern": "^[0-9a-fA-F]{24}$"
+            },
+            "required": true,
+            "name": "id",
+            "in": "path"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "API key rotated successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean",
+                      "example": true
+                    },
+                    "response": {
+                      "type": "object",
+                      "properties": {
+                        "key": {
+                          "type": "object",
+                          "properties": {
+                            "id": {
+                              "type": "string",
+                              "example": "64b8f1a2c3d4e5f6a7b8c9d0"
+                            },
+                            "name": {
+                              "type": "string",
+                              "example": "Development Key"
+                            },
+                            "plainKey": {
+                              "type": "string",
+                              "example": "cr_live_abc123xyz789payg123456"
+                            },
+                            "keyPrefix": {
+                              "type": "string",
+                              "example": "cr_live_abc123"
+                            },
+                            "scopes": {
+                              "type": "array",
+                              "items": {
+                                "type": "string"
+                              },
+                              "example": [
+                                "cases:read"
+                              ]
+                            },
+                            "expiresAt": {
+                              "type": "string",
+                              "example": "2025-01-01T00:00:00.000Z"
+                            },
+                            "createdAt": {
+                              "type": "string",
+                              "example": "2024-01-01T00:00:00.000Z"
+                            }
+                          },
+                          "required": [
+                            "id",
+                            "name",
+                            "plainKey",
+                            "keyPrefix",
+                            "scopes",
+                            "createdAt"
+                          ]
+                        },
+                        "warning": {
+                          "type": "string",
+                          "example": "Store this key securely - it cannot be retrieved again"
+                        }
+                      },
+                      "required": [
+                        "key",
+                        "warning"
+                      ]
+                    }
+                  },
+                  "required": [
+                    "success",
+                    "response"
+                  ]
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean",
+                      "example": false
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Error message"
+                    }
+                  },
+                  "required": [
+                    "success",
+                    "message"
+                  ]
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "API key not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean",
+                      "example": false
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Error message"
+                    }
+                  },
+                  "required": [
+                    "success",
+                    "message"
+                  ]
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/case-detail/searchByCnr": {
+      "post": {
+        "tags": [
+          "Case Detail"
+        ],
+        "summary": "Get full case details by CNR number",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "cnrNumber": {
+                    "type": "string",
+                    "minLength": 16,
+                    "maxLength": 16,
+                    "pattern": "^[A-Z]{4}[A-Z0-9]{2}\\d{10}$"
+                  },
+                  "includeHearings": {
+                    "type": "boolean"
+                  },
+                  "includeOrders": {
+                    "type": "boolean"
+                  }
+                },
+                "required": [
+                  "cnrNumber"
+                ]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Case found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean",
+                      "example": true
+                    },
+                    "response": {
+                      "type": "object",
+                      "properties": {
+                        "data": {
+                          "type": "object",
+                          "properties": {
+                            "cnrNumber": {
+                              "type": "string",
+                              "example": "MHPN010123456789"
+                            },
+                            "caseType": {
+                              "type": "string",
+                              "example": "CS"
+                            },
+                            "caseNumber": {
+                              "type": "string",
+                              "example": "CS/12/2023"
+                            },
+                            "registrationNumber": {
+                              "type": [
+                                "string",
+                                "null"
+                              ]
+                            },
+                            "filingNumber": {
+                              "type": [
+                                "string",
+                                "null"
+                              ]
+                            },
+                            "filingDate": {
+                              "type": "string",
+                              "example": "01-01-2023"
+                            },
+                            "registrationDate": {
+                              "type": [
+                                "string",
+                                "null"
+                              ]
+                            },
+                            "decisionDate": {
+                              "type": [
+                                "string",
+                                "null"
+                              ]
+                            },
+                            "caseStatus": {
+                              "type": "string",
+                              "enum": [
+                                "Pending",
+                                "Disposed"
+                              ]
+                            },
+                            "natureOfDisposal": {
+                              "type": [
+                                "string",
+                                "null"
+                              ]
+                            },
+                            "court": {
+                              "type": "object",
+                              "properties": {
+                                "stateCode": {
+                                  "type": "string",
+                                  "example": "MH"
+                                },
+                                "stateName": {
+                                  "type": "string",
+                                  "example": "Maharashtra"
+                                },
+                                "districtCode": {
+                                  "type": "string",
+                                  "example": "PUNE"
+                                },
+                                "districtName": {
+                                  "type": "string",
+                                  "example": "Pune"
+                                },
+                                "complexCode": {
+                                  "type": "string"
+                                },
+                                "complexName": {
+                                  "type": "string"
+                                },
+                                "courtNumber": {
+                                  "type": "string"
+                                },
+                                "courtName": {
+                                  "type": "string"
+                                },
+                                "establishmentCode": {
+                                  "type": "string"
+                                }
+                              },
+                              "required": [
+                                "stateCode",
+                                "stateName",
+                                "districtCode",
+                                "districtName",
+                                "complexCode",
+                                "complexName",
+                                "courtNumber",
+                                "courtName",
+                                "establishmentCode"
+                              ]
+                            },
+                            "judgeName": {
+                              "type": [
+                                "string",
+                                "null"
+                              ],
+                              "example": "Hon'ble Shri M. Rajendar Reddy"
+                            },
+                            "petitioners": {
+                              "type": "array",
+                              "items": {
+                                "type": "object",
+                                "properties": {
+                                  "partyName": {
+                                    "type": [
+                                      "string",
+                                      "null"
+                                    ],
+                                    "example": "John Doe"
+                                  },
+                                  "partyType": {
+                                    "type": [
+                                      "string",
+                                      "null"
+                                    ],
+                                    "example": "Petitioner"
+                                  },
+                                  "advocateName": {
+                                    "type": [
+                                      "string",
+                                      "null"
+                                    ],
+                                    "example": "Adv. Jane Smith"
+                                  },
+                                  "advocateCode": {
+                                    "type": [
+                                      "string",
+                                      "null"
+                                    ]
+                                  }
+                                },
+                                "required": [
+                                  "partyName",
+                                  "partyType",
+                                  "advocateName",
+                                  "advocateCode"
+                                ]
+                              }
+                            },
+                            "respondents": {
+                              "type": "array",
+                              "items": {
+                                "type": "object",
+                                "properties": {
+                                  "partyName": {
+                                    "type": [
+                                      "string",
+                                      "null"
+                                    ],
+                                    "example": "John Doe"
+                                  },
+                                  "partyType": {
+                                    "type": [
+                                      "string",
+                                      "null"
+                                    ],
+                                    "example": "Petitioner"
+                                  },
+                                  "advocateName": {
+                                    "type": [
+                                      "string",
+                                      "null"
+                                    ],
+                                    "example": "Adv. Jane Smith"
+                                  },
+                                  "advocateCode": {
+                                    "type": [
+                                      "string",
+                                      "null"
+                                    ]
+                                  }
+                                },
+                                "required": [
+                                  "partyName",
+                                  "partyType",
+                                  "advocateName",
+                                  "advocateCode"
+                                ]
+                              }
+                            },
+                            "subject": {
+                              "type": "null"
+                            },
+                            "category": {
+                              "type": [
+                                "string",
+                                "null"
+                              ]
+                            },
+                            "subCategory": {
+                              "type": [
+                                "string",
+                                "null"
+                              ]
+                            },
+                            "acts": {
+                              "type": "array",
+                              "items": {
+                                "type": "object",
+                                "properties": {
+                                  "act": {
+                                    "type": [
+                                      "string",
+                                      "null"
+                                    ]
+                                  },
+                                  "section": {
+                                    "type": [
+                                      "string",
+                                      "null"
+                                    ]
+                                  }
+                                },
+                                "required": [
+                                  "act",
+                                  "section"
+                                ]
+                              }
+                            },
+                            "firstHearingDate": {
+                              "type": [
+                                "string",
+                                "null"
+                              ]
+                            },
+                            "nextHearingDate": {
+                              "type": [
+                                "string",
+                                "null"
+                              ]
+                            },
+                            "nextHearingPurpose": {
+                              "type": [
+                                "string",
+                                "null"
+                              ]
+                            },
+                            "stage": {
+                              "type": "null"
+                            },
+                            "hearingHistory": {
+                              "type": [
+                                "array",
+                                "null"
+                              ],
+                              "items": {
+                                "type": "object",
+                                "properties": {
+                                  "hearingDate": {
+                                    "type": [
+                                      "string",
+                                      "null"
+                                    ],
+                                    "example": "15-01-2024"
+                                  },
+                                  "businessOnDate": {
+                                    "type": [
+                                      "string",
+                                      "null"
+                                    ]
+                                  },
+                                  "nextDate": {
+                                    "type": [
+                                      "string",
+                                      "null"
+                                    ],
+                                    "example": "20-02-2024"
+                                  },
+                                  "purpose": {
+                                    "type": [
+                                      "string",
+                                      "null"
+                                    ],
+                                    "example": "Arguments"
+                                  },
+                                  "judge": {
+                                    "type": [
+                                      "string",
+                                      "null"
+                                    ]
+                                  },
+                                  "orderUrl": {
+                                    "type": [
+                                      "string",
+                                      "null"
+                                    ]
+                                  }
+                                },
+                                "required": [
+                                  "hearingDate",
+                                  "businessOnDate",
+                                  "nextDate",
+                                  "purpose",
+                                  "judge",
+                                  "orderUrl"
+                                ]
+                              }
+                            },
+                            "lowerCourtDetails": {
+                              "type": [
+                                "object",
+                                "null"
+                              ],
+                              "properties": {
+                                "courtName": {
+                                  "type": [
+                                    "string",
+                                    "null"
+                                  ]
+                                },
+                                "caseNumber": {
+                                  "type": [
+                                    "string",
+                                    "null"
+                                  ]
+                                },
+                                "decisionDate": {
+                                  "type": [
+                                    "string",
+                                    "null"
+                                  ]
+                                },
+                                "decision": {
+                                  "type": [
+                                    "string",
+                                    "null"
+                                  ]
+                                }
+                              },
+                              "required": [
+                                "courtName",
+                                "caseNumber",
+                                "decisionDate",
+                                "decision"
+                              ]
+                            },
+                            "linkedCases": {
+                              "type": [
+                                "array",
+                                "null"
+                              ],
+                              "items": {
+                                "type": "object",
+                                "additionalProperties": {}
+                              }
+                            },
+                            "transferDetails": {
+                              "type": "null"
+                            },
+                            "lastUpdated": {
+                              "type": "string",
+                              "example": "2024-01-15T10:30:00.000Z"
+                            },
+                            "firDetails": {
+                              "type": [
+                                "object",
+                                "null"
+                              ],
+                              "properties": {
+                                "policeStation": {
+                                  "type": [
+                                    "string",
+                                    "null"
+                                  ]
+                                },
+                                "firNumber": {
+                                  "type": [
+                                    "string",
+                                    "null"
+                                  ]
+                                },
+                                "year": {
+                                  "type": [
+                                    "string",
+                                    "null"
+                                  ]
+                                }
+                              },
+                              "required": [
+                                "policeStation",
+                                "firNumber",
+                                "year"
+                              ]
+                            }
+                          },
+                          "required": [
+                            "cnrNumber",
+                            "caseType",
+                            "caseNumber",
+                            "registrationNumber",
+                            "filingNumber",
+                            "filingDate",
+                            "registrationDate",
+                            "decisionDate",
+                            "caseStatus",
+                            "natureOfDisposal",
+                            "court",
+                            "judgeName",
+                            "petitioners",
+                            "respondents",
+                            "subject",
+                            "category",
+                            "subCategory",
+                            "acts",
+                            "firstHearingDate",
+                            "nextHearingDate",
+                            "nextHearingPurpose",
+                            "stage",
+                            "hearingHistory",
+                            "lowerCourtDetails",
+                            "linkedCases",
+                            "transferDetails",
+                            "lastUpdated",
+                            "firDetails"
+                          ]
+                        }
+                      },
+                      "required": [
+                        "data"
+                      ]
+                    }
+                  },
+                  "required": [
+                    "success",
+                    "response"
+                  ]
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Validation error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean",
+                      "example": false
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Error message"
+                    },
+                    "moreInfo": {
+                      "type": "string",
+                      "example": "No additional info found."
+                    }
+                  },
+                  "required": [
+                    "success",
+                    "message",
+                    "moreInfo"
+                  ]
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean",
+                      "example": false
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Error message"
+                    },
+                    "moreInfo": {
+                      "type": "string",
+                      "example": "No additional info found."
+                    }
+                  },
+                  "required": [
+                    "success",
+                    "message",
+                    "moreInfo"
+                  ]
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Case not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean",
+                      "example": false
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Error message"
+                    },
+                    "moreInfo": {
+                      "type": "string",
+                      "example": "No additional info found."
+                    }
+                  },
+                  "required": [
+                    "success",
+                    "message",
+                    "moreInfo"
+                  ]
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/case-detail/searchByCnr/bulk": {
+      "post": {
+        "tags": [
+          "Case Detail"
+        ],
+        "summary": "Get case details for multiple CNR numbers (max 50)",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "cnrNumbers": {
+                    "type": "array",
+                    "items": {
+                      "type": "string",
+                      "minLength": 16,
+                      "maxLength": 16,
+                      "pattern": "^[A-Z]{4}[A-Z0-9]{2}\\d{10}$"
+                    },
+                    "minItems": 1,
+                    "maxItems": 50
+                  },
+                  "includeHearings": {
+                    "type": "boolean"
+                  },
+                  "includeOrders": {
+                    "type": "boolean"
+                  }
+                },
+                "required": [
+                  "cnrNumbers"
+                ]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Bulk search result",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean",
+                      "example": true
+                    },
+                    "response": {
+                      "type": "object",
+                      "properties": {
+                        "totalRequested": {
+                          "type": "number",
+                          "example": 3
+                        },
+                        "totalFound": {
+                          "type": "number",
+                          "example": 2
+                        },
+                        "totalNotFound": {
+                          "type": "number",
+                          "example": 1
+                        },
+                        "totalFailed": {
+                          "type": "number",
+                          "example": 0
+                        },
+                        "data": {
+                          "type": "array",
+                          "items": {
+                            "type": "object",
+                            "properties": {
+                              "cnrNumber": {
+                                "type": "string",
+                                "example": "MHPN010123456789"
+                              },
+                              "caseType": {
+                                "type": "string",
+                                "example": "CS"
+                              },
+                              "caseNumber": {
+                                "type": "string",
+                                "example": "CS/12/2023"
+                              },
+                              "registrationNumber": {
+                                "type": [
+                                  "string",
+                                  "null"
+                                ]
+                              },
+                              "filingNumber": {
+                                "type": [
+                                  "string",
+                                  "null"
+                                ]
+                              },
+                              "filingDate": {
+                                "type": "string",
+                                "example": "01-01-2023"
+                              },
+                              "registrationDate": {
+                                "type": [
+                                  "string",
+                                  "null"
+                                ]
+                              },
+                              "decisionDate": {
+                                "type": [
+                                  "string",
+                                  "null"
+                                ]
+                              },
+                              "caseStatus": {
+                                "type": "string",
+                                "enum": [
+                                  "Pending",
+                                  "Disposed"
+                                ]
+                              },
+                              "natureOfDisposal": {
+                                "type": [
+                                  "string",
+                                  "null"
+                                ]
+                              },
+                              "court": {
+                                "type": "object",
+                                "properties": {
+                                  "stateCode": {
+                                    "type": "string",
+                                    "example": "MH"
+                                  },
+                                  "stateName": {
+                                    "type": "string",
+                                    "example": "Maharashtra"
+                                  },
+                                  "districtCode": {
+                                    "type": "string",
+                                    "example": "PUNE"
+                                  },
+                                  "districtName": {
+                                    "type": "string",
+                                    "example": "Pune"
+                                  },
+                                  "complexCode": {
+                                    "type": "string"
+                                  },
+                                  "complexName": {
+                                    "type": "string"
+                                  },
+                                  "courtNumber": {
+                                    "type": "string"
+                                  },
+                                  "courtName": {
+                                    "type": "string"
+                                  },
+                                  "establishmentCode": {
+                                    "type": "string"
+                                  }
+                                },
+                                "required": [
+                                  "stateCode",
+                                  "stateName",
+                                  "districtCode",
+                                  "districtName",
+                                  "complexCode",
+                                  "complexName",
+                                  "courtNumber",
+                                  "courtName",
+                                  "establishmentCode"
+                                ]
+                              },
+                              "judgeName": {
+                                "type": [
+                                  "string",
+                                  "null"
+                                ],
+                                "example": "Hon'ble Shri M. Rajendar Reddy"
+                              },
+                              "petitioners": {
+                                "type": "array",
+                                "items": {
+                                  "type": "object",
+                                  "properties": {
+                                    "partyName": {
+                                      "type": [
+                                        "string",
+                                        "null"
+                                      ],
+                                      "example": "John Doe"
+                                    },
+                                    "partyType": {
+                                      "type": [
+                                        "string",
+                                        "null"
+                                      ],
+                                      "example": "Petitioner"
+                                    },
+                                    "advocateName": {
+                                      "type": [
+                                        "string",
+                                        "null"
+                                      ],
+                                      "example": "Adv. Jane Smith"
+                                    },
+                                    "advocateCode": {
+                                      "type": [
+                                        "string",
+                                        "null"
+                                      ]
+                                    }
+                                  },
+                                  "required": [
+                                    "partyName",
+                                    "partyType",
+                                    "advocateName",
+                                    "advocateCode"
+                                  ]
+                                }
+                              },
+                              "respondents": {
+                                "type": "array",
+                                "items": {
+                                  "type": "object",
+                                  "properties": {
+                                    "partyName": {
+                                      "type": [
+                                        "string",
+                                        "null"
+                                      ],
+                                      "example": "John Doe"
+                                    },
+                                    "partyType": {
+                                      "type": [
+                                        "string",
+                                        "null"
+                                      ],
+                                      "example": "Petitioner"
+                                    },
+                                    "advocateName": {
+                                      "type": [
+                                        "string",
+                                        "null"
+                                      ],
+                                      "example": "Adv. Jane Smith"
+                                    },
+                                    "advocateCode": {
+                                      "type": [
+                                        "string",
+                                        "null"
+                                      ]
+                                    }
+                                  },
+                                  "required": [
+                                    "partyName",
+                                    "partyType",
+                                    "advocateName",
+                                    "advocateCode"
+                                  ]
+                                }
+                              },
+                              "subject": {
+                                "type": "null"
+                              },
+                              "category": {
+                                "type": [
+                                  "string",
+                                  "null"
+                                ]
+                              },
+                              "subCategory": {
+                                "type": [
+                                  "string",
+                                  "null"
+                                ]
+                              },
+                              "acts": {
+                                "type": "array",
+                                "items": {
+                                  "type": "object",
+                                  "properties": {
+                                    "act": {
+                                      "type": [
+                                        "string",
+                                        "null"
+                                      ]
+                                    },
+                                    "section": {
+                                      "type": [
+                                        "string",
+                                        "null"
+                                      ]
+                                    }
+                                  },
+                                  "required": [
+                                    "act",
+                                    "section"
+                                  ]
+                                }
+                              },
+                              "firstHearingDate": {
+                                "type": [
+                                  "string",
+                                  "null"
+                                ]
+                              },
+                              "nextHearingDate": {
+                                "type": [
+                                  "string",
+                                  "null"
+                                ]
+                              },
+                              "nextHearingPurpose": {
+                                "type": [
+                                  "string",
+                                  "null"
+                                ]
+                              },
+                              "stage": {
+                                "type": "null"
+                              },
+                              "hearingHistory": {
+                                "type": [
+                                  "array",
+                                  "null"
+                                ],
+                                "items": {
+                                  "type": "object",
+                                  "properties": {
+                                    "hearingDate": {
+                                      "type": [
+                                        "string",
+                                        "null"
+                                      ],
+                                      "example": "15-01-2024"
+                                    },
+                                    "businessOnDate": {
+                                      "type": [
+                                        "string",
+                                        "null"
+                                      ]
+                                    },
+                                    "nextDate": {
+                                      "type": [
+                                        "string",
+                                        "null"
+                                      ],
+                                      "example": "20-02-2024"
+                                    },
+                                    "purpose": {
+                                      "type": [
+                                        "string",
+                                        "null"
+                                      ],
+                                      "example": "Arguments"
+                                    },
+                                    "judge": {
+                                      "type": [
+                                        "string",
+                                        "null"
+                                      ]
+                                    },
+                                    "orderUrl": {
+                                      "type": [
+                                        "string",
+                                        "null"
+                                      ]
+                                    }
+                                  },
+                                  "required": [
+                                    "hearingDate",
+                                    "businessOnDate",
+                                    "nextDate",
+                                    "purpose",
+                                    "judge",
+                                    "orderUrl"
+                                  ]
+                                }
+                              },
+                              "lowerCourtDetails": {
+                                "type": [
+                                  "object",
+                                  "null"
+                                ],
+                                "properties": {
+                                  "courtName": {
+                                    "type": [
+                                      "string",
+                                      "null"
+                                    ]
+                                  },
+                                  "caseNumber": {
+                                    "type": [
+                                      "string",
+                                      "null"
+                                    ]
+                                  },
+                                  "decisionDate": {
+                                    "type": [
+                                      "string",
+                                      "null"
+                                    ]
+                                  },
+                                  "decision": {
+                                    "type": [
+                                      "string",
+                                      "null"
+                                    ]
+                                  }
+                                },
+                                "required": [
+                                  "courtName",
+                                  "caseNumber",
+                                  "decisionDate",
+                                  "decision"
+                                ]
+                              },
+                              "linkedCases": {
+                                "type": [
+                                  "array",
+                                  "null"
+                                ],
+                                "items": {
+                                  "type": "object",
+                                  "additionalProperties": {}
+                                }
+                              },
+                              "transferDetails": {
+                                "type": "null"
+                              },
+                              "lastUpdated": {
+                                "type": "string",
+                                "example": "2024-01-15T10:30:00.000Z"
+                              },
+                              "firDetails": {
+                                "type": [
+                                  "object",
+                                  "null"
+                                ],
+                                "properties": {
+                                  "policeStation": {
+                                    "type": [
+                                      "string",
+                                      "null"
+                                    ]
+                                  },
+                                  "firNumber": {
+                                    "type": [
+                                      "string",
+                                      "null"
+                                    ]
+                                  },
+                                  "year": {
+                                    "type": [
+                                      "string",
+                                      "null"
+                                    ]
+                                  }
+                                },
+                                "required": [
+                                  "policeStation",
+                                  "firNumber",
+                                  "year"
+                                ]
+                              }
+                            },
+                            "required": [
+                              "cnrNumber",
+                              "caseType",
+                              "caseNumber",
+                              "registrationNumber",
+                              "filingNumber",
+                              "filingDate",
+                              "registrationDate",
+                              "decisionDate",
+                              "caseStatus",
+                              "natureOfDisposal",
+                              "court",
+                              "judgeName",
+                              "petitioners",
+                              "respondents",
+                              "subject",
+                              "category",
+                              "subCategory",
+                              "acts",
+                              "firstHearingDate",
+                              "nextHearingDate",
+                              "nextHearingPurpose",
+                              "stage",
+                              "hearingHistory",
+                              "lowerCourtDetails",
+                              "linkedCases",
+                              "transferDetails",
+                              "lastUpdated",
+                              "firDetails"
+                            ]
+                          }
+                        },
+                        "notFound": {
+                          "type": "array",
+                          "items": {
+                            "type": "object",
+                            "properties": {
+                              "cnrNumber": {
+                                "type": "string"
+                              },
+                              "reason": {
+                                "type": "string",
+                                "example": "Not found in database"
+                              }
+                            },
+                            "required": [
+                              "cnrNumber",
+                              "reason"
+                            ]
+                          }
+                        },
+                        "failed": {
+                          "type": "array",
+                          "items": {
+                            "type": "object",
+                            "properties": {
+                              "cnrNumber": {
+                                "type": "string"
+                              },
+                              "reason": {
+                                "type": "string"
+                              }
+                            },
+                            "required": [
+                              "cnrNumber",
+                              "reason"
+                            ]
+                          }
+                        }
+                      },
+                      "required": [
+                        "totalRequested",
+                        "totalFound",
+                        "totalNotFound",
+                        "totalFailed",
+                        "data",
+                        "notFound",
+                        "failed"
+                      ]
+                    }
+                  },
+                  "required": [
+                    "success",
+                    "response"
+                  ]
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Validation error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean",
+                      "example": false
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Error message"
+                    },
+                    "moreInfo": {
+                      "type": "string",
+                      "example": "No additional info found."
+                    }
+                  },
+                  "required": [
+                    "success",
+                    "message",
+                    "moreInfo"
+                  ]
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean",
+                      "example": false
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Error message"
+                    },
+                    "moreInfo": {
+                      "type": "string",
+                      "example": "No additional info found."
+                    }
+                  },
+                  "required": [
+                    "success",
+                    "message",
+                    "moreInfo"
+                  ]
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/case-refresh": {
+      "post": {
+        "tags": [
+          "Case Refresh"
+        ],
+        "summary": "Queue a case for re-scraping from eCourts",
+        "description": "Enqueues the case for live re-scraping. Returns `refreshStatus: skipped` if the case was recently queued.",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "cnrNumber": {
+                    "type": "string",
+                    "minLength": 1
+                  },
+                  "force": {
+                    "type": "boolean"
+                  }
+                },
+                "required": [
+                  "cnrNumber"
+                ]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Case queued for refresh",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean",
+                      "example": true
+                    },
+                    "response": {
+                      "type": "object",
+                      "properties": {
+                        "cnrNumber": {
+                          "type": "string",
+                          "example": "MHPN010123456789"
+                        },
+                        "refreshStatus": {
+                          "type": "string",
+                          "enum": [
+                            "updated",
+                            "skipped"
+                          ],
+                          "example": "updated"
+                        },
+                        "refreshedAt": {
+                          "type": "string",
+                          "example": "2024-01-15T10:30:00.000Z"
+                        },
+                        "source": {
+                          "type": "string",
+                          "enum": [
+                            "ecourts_live",
+                            "cache"
+                          ]
+                        },
+                        "changesDetected": {
+                          "type": "boolean",
+                          "example": false
+                        },
+                        "changes": {
+                          "type": "array",
+                          "items": {
+                            "type": "object",
+                            "properties": {
+                              "field": {
+                                "type": "string",
+                                "example": "caseStatus"
+                              },
+                              "oldValue": {},
+                              "newValue": {}
+                            },
+                            "required": [
+                              "field"
+                            ]
+                          }
+                        },
+                        "currentData": {
+                          "type": "object",
+                          "properties": {
+                            "cnrNumber": {
+                              "type": "string",
+                              "example": "MHPN010123456789"
+                            },
+                            "caseStatus": {
+                              "type": "string",
+                              "example": "Pending"
+                            },
+                            "nextHearingDate": {
+                              "type": [
+                                "string",
+                                "null"
+                              ]
+                            },
+                            "nextHearingPurpose": {
+                              "type": [
+                                "string",
+                                "null"
+                              ]
+                            },
+                            "stage": {
+                              "type": "null"
+                            },
+                            "lastUpdated": {
+                              "type": "string",
+                              "example": "2024-01-15T10:30:00.000Z"
+                            }
+                          },
+                          "required": [
+                            "cnrNumber",
+                            "caseStatus",
+                            "nextHearingDate",
+                            "nextHearingPurpose",
+                            "stage",
+                            "lastUpdated"
+                          ]
+                        }
+                      },
+                      "required": [
+                        "cnrNumber",
+                        "refreshStatus",
+                        "refreshedAt",
+                        "source",
+                        "changesDetected",
+                        "changes",
+                        "currentData"
+                      ]
+                    }
+                  },
+                  "required": [
+                    "success",
+                    "response"
+                  ]
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Validation error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean",
+                      "example": false
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Error message"
+                    },
+                    "moreInfo": {
+                      "type": "string",
+                      "example": "No additional info found."
+                    }
+                  },
+                  "required": [
+                    "success",
+                    "message",
+                    "moreInfo"
+                  ]
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean",
+                      "example": false
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Error message"
+                    },
+                    "moreInfo": {
+                      "type": "string",
+                      "example": "No additional info found."
+                    }
+                  },
+                  "required": [
+                    "success",
+                    "message",
+                    "moreInfo"
+                  ]
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Case not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean",
+                      "example": false
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Error message"
+                    },
+                    "moreInfo": {
+                      "type": "string",
+                      "example": "No additional info found."
+                    }
+                  },
+                  "required": [
+                    "success",
+                    "message",
+                    "moreInfo"
+                  ]
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/case-refresh/bulk": {
+      "post": {
+        "tags": [
+          "Case Refresh"
+        ],
+        "summary": "Queue up to 20 cases for re-scraping",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "cnrNumbers": {
+                    "type": "array",
+                    "items": {
+                      "type": "string",
+                      "minLength": 1
+                    },
+                    "minItems": 1,
+                    "maxItems": 20
+                  },
+                  "force": {
+                    "type": "boolean"
+                  },
+                  "returnOnlyChanged": {
+                    "type": "boolean"
+                  }
+                },
+                "required": [
+                  "cnrNumbers"
+                ]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Bulk refresh queued",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean",
+                      "example": true
+                    },
+                    "response": {
+                      "type": "object",
+                      "properties": {
+                        "totalRequested": {
+                          "type": "number",
+                          "example": 5
+                        },
+                        "totalUpdated": {
+                          "type": "number",
+                          "example": 4
+                        },
+                        "totalNoChange": {
+                          "type": "number",
+                          "example": 0
+                        },
+                        "totalFailed": {
+                          "type": "number",
+                          "example": 1
+                        },
+                        "refreshedAt": {
+                          "type": "string",
+                          "example": "2024-01-15T10:30:00.000Z"
+                        },
+                        "results": {
+                          "type": "array",
+                          "items": {
+                            "type": "object",
+                            "properties": {
+                              "cnrNumber": {
+                                "type": "string"
+                              },
+                              "refreshStatus": {
+                                "type": "string"
+                              },
+                              "changesDetected": {
+                                "type": "boolean"
+                              },
+                              "changes": {
+                                "type": "array",
+                                "items": {
+                                  "type": "object",
+                                  "properties": {
+                                    "field": {
+                                      "type": "string",
+                                      "example": "caseStatus"
+                                    },
+                                    "oldValue": {},
+                                    "newValue": {}
+                                  },
+                                  "required": [
+                                    "field"
+                                  ]
+                                }
+                              },
+                              "error": {
+                                "type": "string"
+                              }
+                            },
+                            "required": [
+                              "cnrNumber",
+                              "refreshStatus",
+                              "changesDetected",
+                              "changes"
+                            ]
+                          }
+                        }
+                      },
+                      "required": [
+                        "totalRequested",
+                        "totalUpdated",
+                        "totalNoChange",
+                        "totalFailed",
+                        "refreshedAt",
+                        "results"
+                      ]
+                    }
+                  },
+                  "required": [
+                    "success",
+                    "response"
+                  ]
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Validation error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean",
+                      "example": false
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Error message"
+                    },
+                    "moreInfo": {
+                      "type": "string",
+                      "example": "No additional info found."
+                    }
+                  },
+                  "required": [
+                    "success",
+                    "message",
+                    "moreInfo"
+                  ]
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean",
+                      "example": false
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Error message"
+                    },
+                    "moreInfo": {
+                      "type": "string",
+                      "example": "No additional info found."
+                    }
+                  },
+                  "required": [
+                    "success",
+                    "message",
+                    "moreInfo"
+                  ]
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/case-search/judges": {
+      "get": {
+        "tags": [
+          "Case Search"
+        ],
+        "summary": "List all known judges from high court and supreme court",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Judges list",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean",
+                      "example": true
+                    },
+                    "response": {
+                      "type": "object",
+                      "properties": {
+                        "judges": {
+                          "type": "array",
+                          "items": {
+                            "type": "string",
+                            "example": "Shri M. Rajendar Reddy"
+                          }
+                        }
+                      },
+                      "required": [
+                        "judges"
+                      ]
+                    }
+                  },
+                  "required": [
+                    "success",
+                    "response"
+                  ]
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean",
+                      "example": false
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Error message"
+                    },
+                    "moreInfo": {
+                      "type": "string",
+                      "example": "No additional info found."
+                    }
+                  },
+                  "required": [
+                    "success",
+                    "message",
+                    "moreInfo"
+                  ]
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/case-search": {
+      "post": {
+        "tags": [
+          "Case Search"
+        ],
+        "summary": "Search cases across district, high, and supreme courts",
+        "description": "At least one of: petitioner, respondent, litigant, advocate, judge, filingNumber, or firNumber is required.",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "state": {
+                    "type": "string"
+                  },
+                  "district": {
+                    "type": "string"
+                  },
+                  "petitioner": {
+                    "type": "string",
+                    "minLength": 3
+                  },
+                  "respondent": {
+                    "type": "string",
+                    "minLength": 3
+                  },
+                  "litigant": {
+                    "type": "string",
+                    "minLength": 3
+                  },
+                  "advocate": {
+                    "type": "string",
+                    "minLength": 3
+                  },
+                  "judge": {
+                    "type": "string",
+                    "minLength": 2
+                  },
+                  "filingNumber": {
+                    "type": "string"
+                  },
+                  "caseType": {
+                    "type": "string"
+                  },
+                  "year": {
+                    "type": "integer"
+                  },
+                  "firNumber": {
+                    "type": "string"
+                  },
+                  "policeStation": {
+                    "type": "string"
+                  },
+                  "status": {
+                    "type": "string",
+                    "enum": [
+                      "pending",
+                      "disposed",
+                      "all"
+                    ]
+                  },
+                  "filingDateFrom": {
+                    "type": "string"
+                  },
+                  "filingDateTo": {
+                    "type": "string"
+                  },
+                  "decisionDateFrom": {
+                    "type": "string"
+                  },
+                  "decisionDateTo": {
+                    "type": "string"
+                  },
+                  "sortBy": {
+                    "type": "string",
+                    "enum": [
+                      "year",
+                      "filingDate",
+                      "registrationDate",
+                      "decisionDate"
+                    ]
+                  },
+                  "sortOrder": {
+                    "type": "string",
+                    "enum": [
+                      "asc",
+                      "desc"
+                    ]
+                  },
+                  "page": {
+                    "type": "integer",
+                    "minimum": 1
+                  },
+                  "perPage": {
+                    "type": "integer",
+                    "minimum": 1,
+                    "maximum": 50
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Paginated search results",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean",
+                      "example": true
+                    },
+                    "response": {
+                      "type": "object",
+                      "properties": {
+                        "totalCount": {
+                          "type": "number",
+                          "example": 42
+                        },
+                        "page": {
+                          "type": "number",
+                          "example": 1
+                        },
+                        "limit": {
+                          "type": "number",
+                          "example": 10
+                        },
+                        "pages": {
+                          "type": "number",
+                          "example": 5
+                        },
+                        "cases": {
+                          "type": "array",
+                          "items": {
+                            "type": "object",
+                            "properties": {
+                              "cnrNumber": {
+                                "type": "string",
+                                "example": "MHPN010123456789"
+                              },
+                              "caseType": {
+                                "type": "string",
+                                "example": "CS"
+                              },
+                              "caseNumber": {
+                                "type": "string",
+                                "example": "CS/12/2023"
+                              },
+                              "registrationNumber": {
+                                "type": [
+                                  "string",
+                                  "null"
+                                ]
+                              },
+                              "filingNumber": {
+                                "type": [
+                                  "string",
+                                  "null"
+                                ]
+                              },
+                              "filingDate": {
+                                "type": "string",
+                                "example": "01-01-2023"
+                              },
+                              "registrationDate": {
+                                "type": [
+                                  "string",
+                                  "null"
+                                ]
+                              },
+                              "year": {
+                                "type": [
+                                  "number",
+                                  "null"
+                                ],
+                                "example": 2023
+                              },
+                              "caseStatus": {
+                                "type": "string",
+                                "example": "Pending"
+                              },
+                              "natureOfDisposal": {
+                                "type": [
+                                  "string",
+                                  "null"
+                                ]
+                              },
+                              "category": {
+                                "type": [
+                                  "string",
+                                  "null"
+                                ]
+                              },
+                              "decisionDate": {
+                                "type": [
+                                  "string",
+                                  "null"
+                                ]
+                              },
+                              "petitioners": {
+                                "type": "array",
+                                "items": {
+                                  "type": "object",
+                                  "properties": {
+                                    "partyName": {
+                                      "type": [
+                                        "string",
+                                        "null"
+                                      ],
+                                      "example": "John Doe"
+                                    },
+                                    "advocateName": {
+                                      "type": [
+                                        "string",
+                                        "null"
+                                      ]
+                                    }
+                                  },
+                                  "required": [
+                                    "partyName",
+                                    "advocateName"
+                                  ]
+                                }
+                              },
+                              "respondents": {
+                                "type": "array",
+                                "items": {
+                                  "type": "object",
+                                  "properties": {
+                                    "partyName": {
+                                      "type": [
+                                        "string",
+                                        "null"
+                                      ]
+                                    },
+                                    "advocateName": {
+                                      "type": [
+                                        "string",
+                                        "null"
+                                      ]
+                                    }
+                                  },
+                                  "required": [
+                                    "partyName",
+                                    "advocateName"
+                                  ]
+                                }
+                              },
+                              "nextHearingDate": {
+                                "type": [
+                                  "string",
+                                  "null"
+                                ]
+                              },
+                              "nextHearingPurpose": {
+                                "type": [
+                                  "string",
+                                  "null"
+                                ]
+                              },
+                              "courtName": {
+                                "type": "string",
+                                "example": "Hon'ble Shri M. Rajendar Reddy"
+                              },
+                              "state": {
+                                "type": [
+                                  "string",
+                                  "null"
+                                ],
+                                "example": "Maharashtra"
+                              },
+                              "district": {
+                                "type": [
+                                  "string",
+                                  "null"
+                                ],
+                                "example": "Pune"
+                              }
+                            },
+                            "required": [
+                              "cnrNumber",
+                              "caseType",
+                              "caseNumber",
+                              "registrationNumber",
+                              "filingNumber",
+                              "filingDate",
+                              "registrationDate",
+                              "year",
+                              "caseStatus",
+                              "natureOfDisposal",
+                              "category",
+                              "decisionDate",
+                              "petitioners",
+                              "respondents",
+                              "nextHearingDate",
+                              "nextHearingPurpose",
+                              "courtName",
+                              "state",
+                              "district"
+                            ]
+                          }
+                        }
+                      },
+                      "required": [
+                        "totalCount",
+                        "page",
+                        "limit",
+                        "pages",
+                        "cases"
+                      ]
+                    }
+                  },
+                  "required": [
+                    "success",
+                    "response"
+                  ]
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Validation error or missing search parameter",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean",
+                      "example": false
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Error message"
+                    },
+                    "moreInfo": {
+                      "type": "string",
+                      "example": "No additional info found."
+                    }
+                  },
+                  "required": [
+                    "success",
+                    "message",
+                    "moreInfo"
+                  ]
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean",
+                      "example": false
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Error message"
+                    },
+                    "moreInfo": {
+                      "type": "string",
+                      "example": "No additional info found."
+                    }
+                  },
+                  "required": [
+                    "success",
+                    "message",
+                    "moreInfo"
+                  ]
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/court-structure": {
+      "get": {
+        "tags": [
+          "Court Structure"
+        ],
+        "summary": "Full court hierarchy (states → districts → complexes)",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Full hierarchy",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean",
+                      "example": true
+                    },
+                    "response": {
+                      "type": "object",
+                      "properties": {
+                        "totalStates": {
+                          "type": "number",
+                          "example": 28
+                        },
+                        "generatedAt": {
+                          "type": "string",
+                          "example": "2024-01-15T10:30:00.000Z"
+                        },
+                        "data": {
+                          "type": "array",
+                          "items": {
+                            "type": "object",
+                            "properties": {
+                              "stateCode": {
+                                "type": "string",
+                                "example": "MH"
+                              },
+                              "stateName": {
+                                "type": "string",
+                                "example": "Maharashtra"
+                              },
+                              "totalDistricts": {
+                                "type": "number"
+                              },
+                              "districts": {
+                                "type": "array",
+                                "items": {
+                                  "type": "object",
+                                  "properties": {
+                                    "districtCode": {
+                                      "type": "string",
+                                      "example": "PUNE"
+                                    },
+                                    "districtName": {
+                                      "type": "string",
+                                      "example": "Pune"
+                                    },
+                                    "totalComplexes": {
+                                      "type": "number"
+                                    },
+                                    "complexes": {
+                                      "type": "array",
+                                      "items": {
+                                        "type": "object",
+                                        "properties": {
+                                          "complexCode": {
+                                            "type": "string"
+                                          },
+                                          "complexName": {
+                                            "type": "string"
+                                          },
+                                          "totalCourts": {
+                                            "type": "number"
+                                          }
+                                        },
+                                        "required": [
+                                          "complexCode",
+                                          "complexName",
+                                          "totalCourts"
+                                        ]
+                                      }
+                                    }
+                                  },
+                                  "required": [
+                                    "districtCode",
+                                    "districtName",
+                                    "totalComplexes",
+                                    "complexes"
+                                  ]
+                                }
+                              }
+                            },
+                            "required": [
+                              "stateCode",
+                              "stateName",
+                              "totalDistricts",
+                              "districts"
+                            ]
+                          }
+                        }
+                      },
+                      "required": [
+                        "totalStates",
+                        "generatedAt",
+                        "data"
+                      ]
+                    }
+                  },
+                  "required": [
+                    "success",
+                    "response"
+                  ]
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean",
+                      "example": false
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Error message"
+                    },
+                    "moreInfo": {
+                      "type": "string",
+                      "example": "No additional info found."
+                    }
+                  },
+                  "required": [
+                    "success",
+                    "message",
+                    "moreInfo"
+                  ]
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/court-structure/states": {
+      "get": {
+        "tags": [
+          "Court Structure"
+        ],
+        "summary": "List all states with state codes",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "States list",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean",
+                      "example": true
+                    },
+                    "response": {
+                      "type": "object",
+                      "properties": {
+                        "total": {
+                          "type": "number",
+                          "example": 28
+                        },
+                        "data": {
+                          "type": "array",
+                          "items": {
+                            "type": "object",
+                            "properties": {
+                              "stateCode": {
+                                "type": "string",
+                                "example": "MH"
+                              },
+                              "stateName": {
+                                "type": "string",
+                                "example": "Maharashtra"
+                              }
+                            },
+                            "required": [
+                              "stateCode",
+                              "stateName"
+                            ]
+                          }
+                        }
+                      },
+                      "required": [
+                        "total",
+                        "data"
+                      ]
+                    }
+                  },
+                  "required": [
+                    "success",
+                    "response"
+                  ]
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean",
+                      "example": false
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Error message"
+                    },
+                    "moreInfo": {
+                      "type": "string",
+                      "example": "No additional info found."
+                    }
+                  },
+                  "required": [
+                    "success",
+                    "message",
+                    "moreInfo"
+                  ]
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/court-structure/states/{state}/districts": {
+      "get": {
+        "tags": [
+          "Court Structure"
+        ],
+        "summary": "List districts within a state",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "schema": {
+              "type": "string",
+              "example": "MH"
+            },
+            "required": true,
+            "name": "state",
+            "in": "path"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Districts in state",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean",
+                      "example": true
+                    },
+                    "response": {
+                      "type": "object",
+                      "properties": {
+                        "stateCode": {
+                          "type": "string",
+                          "example": "MH"
+                        },
+                        "stateName": {
+                          "type": "string",
+                          "example": "Maharashtra"
+                        },
+                        "totalDistricts": {
+                          "type": "number"
+                        },
+                        "data": {
+                          "type": "array",
+                          "items": {
+                            "type": "object",
+                            "properties": {
+                              "districtCode": {
+                                "type": "string",
+                                "example": "PUNE"
+                              },
+                              "districtName": {
+                                "type": "string",
+                                "example": "Pune"
+                              }
+                            },
+                            "required": [
+                              "districtCode",
+                              "districtName"
+                            ]
+                          }
+                        }
+                      },
+                      "required": [
+                        "stateCode",
+                        "stateName",
+                        "totalDistricts",
+                        "data"
+                      ]
+                    }
+                  },
+                  "required": [
+                    "success",
+                    "response"
+                  ]
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean",
+                      "example": false
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Error message"
+                    },
+                    "moreInfo": {
+                      "type": "string",
+                      "example": "No additional info found."
+                    }
+                  },
+                  "required": [
+                    "success",
+                    "message",
+                    "moreInfo"
+                  ]
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "State not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean",
+                      "example": false
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Error message"
+                    },
+                    "moreInfo": {
+                      "type": "string",
+                      "example": "No additional info found."
+                    }
+                  },
+                  "required": [
+                    "success",
+                    "message",
+                    "moreInfo"
+                  ]
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/court-structure/states/{state}/districts/{districtCode}/complexes": {
+      "get": {
+        "tags": [
+          "Court Structure"
+        ],
+        "summary": "List court complexes within a district",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "schema": {
+              "type": "string",
+              "example": "MH"
+            },
+            "required": true,
+            "name": "state",
+            "in": "path"
+          },
+          {
+            "schema": {
+              "type": "string",
+              "example": "PUNE"
+            },
+            "required": true,
+            "name": "districtCode",
+            "in": "path"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Complexes in district",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean",
+                      "example": true
+                    },
+                    "response": {
+                      "type": "object",
+                      "properties": {
+                        "stateCode": {
+                          "type": "string"
+                        },
+                        "districtCode": {
+                          "type": "string"
+                        },
+                        "districtName": {
+                          "type": "string"
+                        },
+                        "totalComplexes": {
+                          "type": "number"
+                        },
+                        "data": {
+                          "type": "array",
+                          "items": {
+                            "type": "object",
+                            "properties": {
+                              "complexCode": {
+                                "type": "string",
+                                "example": "MH001"
+                              },
+                              "complexName": {
+                                "type": "string",
+                                "example": "Pune District Court"
+                              },
+                              "address": {
+                                "type": [
+                                  "string",
+                                  "null"
+                                ]
+                              },
+                              "city": {
+                                "type": [
+                                  "string",
+                                  "null"
+                                ]
+                              },
+                              "postalCode": {
+                                "type": [
+                                  "string",
+                                  "null"
+                                ]
+                              },
+                              "latitude": {
+                                "type": [
+                                  "number",
+                                  "null"
+                                ]
+                              },
+                              "longitude": {
+                                "type": [
+                                  "number",
+                                  "null"
+                                ]
+                              }
+                            },
+                            "required": [
+                              "complexCode",
+                              "complexName",
+                              "address",
+                              "city",
+                              "postalCode",
+                              "latitude",
+                              "longitude"
+                            ]
+                          }
+                        }
+                      },
+                      "required": [
+                        "stateCode",
+                        "districtCode",
+                        "districtName",
+                        "totalComplexes",
+                        "data"
+                      ]
+                    }
+                  },
+                  "required": [
+                    "success",
+                    "response"
+                  ]
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean",
+                      "example": false
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Error message"
+                    },
+                    "moreInfo": {
+                      "type": "string",
+                      "example": "No additional info found."
+                    }
+                  },
+                  "required": [
+                    "success",
+                    "message",
+                    "moreInfo"
+                  ]
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "District not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean",
+                      "example": false
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Error message"
+                    },
+                    "moreInfo": {
+                      "type": "string",
+                      "example": "No additional info found."
+                    }
+                  },
+                  "required": [
+                    "success",
+                    "message",
+                    "moreInfo"
+                  ]
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/court-structure/states/{state}/districts/{districtCode}/complexes/{complexCode}/courts": {
+      "get": {
+        "tags": [
+          "Court Structure"
+        ],
+        "summary": "List individual courts within a complex",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "schema": {
+              "type": "string",
+              "example": "MH"
+            },
+            "required": true,
+            "name": "state",
+            "in": "path"
+          },
+          {
+            "schema": {
+              "type": "string",
+              "example": "PUNE"
+            },
+            "required": true,
+            "name": "districtCode",
+            "in": "path"
+          },
+          {
+            "schema": {
+              "type": "string",
+              "example": "MH001"
+            },
+            "required": true,
+            "name": "complexCode",
+            "in": "path"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Courts in complex",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean",
+                      "example": true
+                    },
+                    "response": {
+                      "type": "object",
+                      "properties": {
+                        "stateCode": {
+                          "type": "string"
+                        },
+                        "stateName": {
+                          "type": "string"
+                        },
+                        "districtCode": {
+                          "type": "string"
+                        },
+                        "districtName": {
+                          "type": "string"
+                        },
+                        "complexCode": {
+                          "type": "string"
+                        },
+                        "complexName": {
+                          "type": "string"
+                        },
+                        "highCourtCode": {
+                          "type": [
+                            "string",
+                            "null"
+                          ]
+                        },
+                        "highCourtName": {
+                          "type": [
+                            "string",
+                            "null"
+                          ]
+                        },
+                        "address": {
+                          "type": [
+                            "string",
+                            "null"
+                          ]
+                        },
+                        "city": {
+                          "type": [
+                            "string",
+                            "null"
+                          ]
+                        },
+                        "postalCode": {
+                          "type": [
+                            "string",
+                            "null"
+                          ]
+                        },
+                        "latitude": {
+                          "type": [
+                            "number",
+                            "null"
+                          ]
+                        },
+                        "longitude": {
+                          "type": [
+                            "number",
+                            "null"
+                          ]
+                        },
+                        "totalCourts": {
+                          "type": "number"
+                        },
+                        "data": {
+                          "type": "array",
+                          "items": {
+                            "type": "object",
+                            "properties": {
+                              "courtCode": {
+                                "type": "string"
+                              },
+                              "courtName": {
+                                "type": [
+                                  "string",
+                                  "null"
+                                ]
+                              },
+                              "courtDivision": {
+                                "type": [
+                                  "string",
+                                  "null"
+                                ]
+                              },
+                              "judgeName": {
+                                "type": [
+                                  "string",
+                                  "null"
+                                ]
+                              }
+                            },
+                            "required": [
+                              "courtCode",
+                              "courtName",
+                              "courtDivision",
+                              "judgeName"
+                            ]
+                          }
+                        }
+                      },
+                      "required": [
+                        "stateCode",
+                        "stateName",
+                        "districtCode",
+                        "districtName",
+                        "complexCode",
+                        "complexName",
+                        "highCourtCode",
+                        "highCourtName",
+                        "address",
+                        "city",
+                        "postalCode",
+                        "latitude",
+                        "longitude",
+                        "totalCourts",
+                        "data"
+                      ]
+                    }
+                  },
+                  "required": [
+                    "success",
+                    "response"
+                  ]
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean",
+                      "example": false
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Error message"
+                    },
+                    "moreInfo": {
+                      "type": "string",
+                      "example": "No additional info found."
+                    }
+                  },
+                  "required": [
+                    "success",
+                    "message",
+                    "moreInfo"
+                  ]
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Complex not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean",
+                      "example": false
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Error message"
+                    },
+                    "moreInfo": {
+                      "type": "string",
+                      "example": "No additional info found."
+                    }
+                  },
+                  "required": [
+                    "success",
+                    "message",
+                    "moreInfo"
+                  ]
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "webhooks": {}
+}

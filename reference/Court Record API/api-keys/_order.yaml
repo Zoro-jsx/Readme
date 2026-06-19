@@ -4,3 +4,9 @@
 - patch_api-keys-id
 - delete_api-keys-id
 - post_api-keys-id-rotate
+- post_api-keys-1
+- get_api-keys-1
+- get_api-keys-id-1
+- patch_api-keys-id-1
+- delete_api-keys-id-1
+- post_api-keys-id-rotate-1
