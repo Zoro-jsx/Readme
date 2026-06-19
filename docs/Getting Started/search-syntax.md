@@ -4,7 +4,7 @@ excerpt: >-
   The case search endpoint (`POST /case-search`) allows you to find case
   summaries across district, high, and supreme courts.
 deprecated: false
-hidden: false
+hidden: true
 metadata:
   robots: index
 ---
