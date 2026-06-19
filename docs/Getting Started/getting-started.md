@@ -10,12 +10,6 @@ hidden: false
 metadata:
   robots: index
 ---
-#
-
-.
-
-***
-
 ## Base URLs
 
 The API is versioned to ensure stability. Base URLs are relative to your deployment domain:
