@@ -11,48 +11,53 @@ metadata:
   robots: index
 ---
 
-# Getting Started
+**Getting Started**
 
-Welcome to the **Court Record Platform API**! This API allows developers to programmatically search court cases, monitor case hearings, track case progression, and automate data retrieval from Indian district courts, high courts, and the supreme court.
+This guide walks through everything required to make your first authenticated API call to the Court Record Platform. The process takes fewer than five minutes.
 
----
+**Environments**
 
-## Base URLs
+The platform operates two environments. Use the sandbox for integration development and testing before moving to production.
 
-The API is versioned to ensure stability. The base URL for all programmatic requests is:
+| Environment | Base URL |
+| :--- | :--- |
+| Production | `https://api.courtrecordplatform.in/api/v1` |
+| Sandbox | `https://sandbox.courtrecordplatform.in/api/v1` |
 
-| Version | Base URL | Description |
-| :--- | :--- | :--- |
-| **Version 1** | `https://api.yourcompany.com/api/v1` | Main stable version for all public features. |
+All endpoints, request formats, and response schemas are identical across both environments. Credits consumed in the sandbox do not deduct from your production balance.
 
----
+**Creating an API Key**
 
-## Basic Integration Workflow
+1. Log in to the [Developer Portal](https://courtrecordplatform.in)
+2. Navigate to **Settings → API Keys**
+3. Click **Generate New Key**
+4. Enter a descriptive name for the key (for example, "Production Integration" or "CI Pipeline")
+5. Select the permission scopes required for your use case
+6. Click **Generate** and copy the `plainKey` value immediately
 
-Integrating with the Court Record Platform typically involves these simple steps:
+> The plain key value is displayed exactly once at creation time and cannot be retrieved afterwards. Store it in a secrets manager or environment variable before closing the dialog. If a key is lost, rotate it immediately from the dashboard.
 
-```mermaid
-graph TD
-    A[Generate API Key in Portal] --> B[Verify Wallet Balance]
-    B --> C[Run Case Search]
-    C --> D[Fetch Case Detail / CNR]
-```
+**Making Your First Request**
 
-### 1. Generate API Key
-To authenticate your programmatic requests, log in to the developer portal dashboard using your credentials, navigate to **Settings > API Keys**, and generate a new API Key with the required scopes (e.g., `cases:read`).
-
-> [!WARNING]
-> Copy the returned `plainKey` immediately. It is only shown once at creation and cannot be retrieved again.
-
-### 2. Make Your First Query
-Use your API Key (passed as a Bearer token in the `Authorization` header) to run a case search:
+Pass the API key as a Bearer token in the `Authorization` header on every request.
 
 ```bash
-curl -X POST https://api.yourcompany.com/api/v1/case-search \
-  -H "Authorization: Bearer cr_live_yourPlainKeyHere" \
+curl -X POST https://api.courtrecordplatform.in/api/v1/case-search \
+  -H "Authorization: Bearer cr_live_yourKeyHere" \
   -H "Content-Type: application/json" \
   -d '{
     "petitioner": "State of Maharashtra",
-    "year": 2023
+    "year": 2024
   }'
 ```
+
+A successful response returns a paginated list of matching case summaries along with faceted counts for status, state, and case type.
+
+**Next Steps**
+
+Once authentication is working, the natural progression is:
+
+1. Use [Case Search](reference/case-search) to locate cases by party name, advocate, judge, or FIR number
+2. Use [Case Detail](reference/case-detail) with a `cnrNumber` from search results to retrieve the full case record
+3. Use [Case Refresh](reference/case-refresh) to keep case data current for cases you are actively monitoring
+4. Review [Credits & Billing](credits-and-billing) to understand how API usage is metered
