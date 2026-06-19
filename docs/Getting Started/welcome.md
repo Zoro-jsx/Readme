@@ -32,7 +32,7 @@ Get started with your integration using these resources:
 
 ## Core API References
 
-Once you have uploaded the OpenAPI spec, you can try out live endpoints in the interactive reference panel:
+You can test these endpoints dynamically in the interactive API reference playground:
 
 | Area | Resource Path | Primary Method | Description |
 | :--- | :--- | :--- | :--- |
