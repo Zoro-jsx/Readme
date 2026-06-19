@@ -1,5 +1,5 @@
 ---
-title: '# Getting Started'
+title: Getting Started
 excerpt: >-
   Welcome to the **Court Record Platform API**! This API allows developers to
   programmatically search court cases, monitor case hearings, track case
