@@ -10,15 +10,23 @@ hidden: false
 metadata:
   robots: index
 ---
+
+# Getting Started
+
+Welcome to the **Court Record Platform API**! This API allows developers to programmatically search court cases, monitor case hearings, track case progression, and automate data retrieval from Indian district courts, high courts, and the supreme court.
+
+---
+
 ## Base URLs
 
 The API is versioned to ensure stability. Base URLs are relative to your deployment domain:
 
-| Version       | Base URL                             | Description                               |
-| :------------ | :----------------------------------- | :---------------------------------------- |
+| Version | Base URL | Description |
+| :--- | :--- | :--- |
 | **Version 1** | `https://api.yourcompany.com/api/v1` | Main stable version for current features. |
+| **Version 2** | `https://api.yourcompany.com/api/v2` | Advanced version containing breaking changes (e.g. restructured user data model). |
 
-***
+---
 
 ## Basic Workflow
 
@@ -33,7 +41,6 @@ graph TD
 ```
 
 ### 1. Register & Login (For Web/Portal Apps)
-
 If you are building a web application using user credentials, first register and authenticate to get your session token:
 
 ```bash
@@ -59,7 +66,6 @@ curl -X POST https://api.yourcompany.com/api/v1/auth/login \
 ```
 
 ### 2. Generate API Keys (For Programmatic/Server Apps)
-
 If you are building server-side automation tools, log into the developer portal, go to your Profile settings, and call the API Key generation endpoint to get your API Token:
 
 ```bash
@@ -72,11 +78,10 @@ curl -X POST https://api.yourcompany.com/api/v1/api-keys \
   }'
 ```
 
-> \[!WARNING]
+> [!WARNING]
 > Copy the returned `plainKey` immediately. It is only shown once at creation and cannot be retrieved again.
 
 ### 3. Make Your First Query
-
 Use your API Key (passed as a Bearer token in the `Authorization` header) to run a case search:
 
 ```bash
@@ -88,5 +93,3 @@ curl -X POST https://api.yourcompany.com/api/v1/case-search \
     "year": 2023
   }'
 ```
-
-<br />
