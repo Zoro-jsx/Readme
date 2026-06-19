@@ -1,8 +1,0 @@
-- post_auth-register
-- post_auth-verify-otp
-- post_auth-resend-otp
-- post_auth-login
-- get_auth-me
-- post_auth-refresh
-- post_auth-logout
-- get_auth-status
