@@ -10,52 +10,59 @@ metadata:
   robots: index
 ---
 
-# Pagination
+**Pagination**
 
-All endpoints that return a list of items (e.g. search results, transaction histories, usage logs, user notifications) are paginated to ensure optimal performance and fast response times.
+Endpoints that return lists — case search results and transaction history — support pagination through two request parameters.
 
----
-
-## Request Parameters
-
-To paginate list results, include the following query parameters in your request:
+**Request Parameters**
 
 | Parameter | Type | Default | Description |
 | :--- | :--- | :--- | :--- |
-| `page` | `number` | `1` | The page index to fetch (1-indexed). |
-| `limit` | `number` | `20` | The number of documents to return per page. Max: `100`. |
+| `page` | integer | `1` | The page number to retrieve, starting from 1 |
+| `perPage` | integer | `20` | Number of results per page. Maximum is `100` |
 
----
+For `POST` endpoints such as `/case-search`, these parameters are included in the JSON request body. For `GET` endpoints such as `/api-billing/transactions`, they are passed as query parameters.
 
-## Response Envelope
+**Response Envelope**
 
-All paginated responses follow a standard envelope wrapper matching the Mongoose pagination schema:
+All paginated responses include the following fields alongside the results array.
 
 ```json
 {
   "success": true,
   "response": {
-    "docs": [
-      // List of result objects (e.g. Cases, Transactions, Notifications)
-    ],
-    "totalDocs": 120,    // Total number of matching items in the database
-    "limit": 20,         // Limit used in the query
-    "page": 1,           // Current page number
-    "totalPages": 6,     // Total pages available
-    "pagingCounter": 1,  // The index of the first document on the current page
-    "hasPrevPage": false,// True if a previous page exists
-    "hasNextPage": true, // True if a next page exists
-    "prevPage": null,    // Previous page index (null if first page)
-    "nextPage": 2        // Next page index (null if last page)
+    "totalCount": 84,
+    "page": 2,
+    "limit": 20,
+    "pages": 5,
+    "cases": [ ... ]
   }
 }
 ```
 
----
+| Field | Description |
+| :--- | :--- |
+| `totalCount` | Total number of records matching the query across all pages |
+| `page` | The page returned in this response |
+| `limit` | The page size used for this response |
+| `pages` | Total number of available pages |
 
-## Example Paginated Request
+To determine whether more results exist, check whether `page` is less than `pages`. When they are equal, the current page is the last.
+
+**Iterating Through Pages**
 
 ```bash
-curl -X GET "https://api.yourcompany.com/api/v1/wallet/transactions?page=2&limit=10" \
-  -H "Authorization: Bearer <your_api_key>"
+# Page 1
+curl -X POST https://api.courtrecordplatform.in/api/v1/case-search \
+  -H "Authorization: Bearer cr_live_yourKey" \
+  -H "Content-Type: application/json" \
+  -d '{ "petitioner": "Reliance Industries", "page": 1, "perPage": 20 }'
+
+# Page 2
+curl -X POST https://api.courtrecordplatform.in/api/v1/case-search \
+  -H "Authorization: Bearer cr_live_yourKey" \
+  -H "Content-Type: application/json" \
+  -d '{ "petitioner": "Reliance Industries", "page": 2, "perPage": 20 }'
 ```
+
+Each page request for a search endpoint consumes credits. When iterating through large result sets, cache results locally to avoid redundant requests. The `totalCount` field on the first page response can be used to determine in advance how many pages to expect.
