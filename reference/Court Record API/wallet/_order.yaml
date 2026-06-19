@@ -1,2 +1,4 @@
 - get_wallet
 - get_wallet-transactions
+- post_wallet-self-topup
+- post_wallet-self-topup-verify
