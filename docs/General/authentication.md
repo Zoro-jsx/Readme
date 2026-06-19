@@ -19,7 +19,7 @@ All endpoints in the Court Record Platform API require authentication. Authentic
 Authorization: Bearer <your_api_key>
 ```
 
-The API key is prefixed with `cr_live_` for production keys and `cr_test_` for sandbox keys. Including the full string — prefix and random characters — is required.
+The API key value returned at creation time must be included in full — prefix and random characters. Including the full string is required.
 
 **Example**
 
