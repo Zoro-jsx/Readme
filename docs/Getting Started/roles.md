@@ -23,28 +23,14 @@ The platform defines three default system roles. These system roles are protecte
 
 ---
 
-## Permissions & Scope Table
+## API Scopes & Permissions
 
-When generating an API Key, you can limit its scope by choosing a subset of the permissions allowed by your user role. The default permissions mapped to each system role include:
+When generating an API Key, you can limit its scope by choosing a subset of the permissions allowed by your user role:
 
-### 1. Case & Scraper Management
-* **`read:cases`**: Query cases via `/case-search` and `/case-detail`. *(Client, Lawyer, Admin)*
-* **`write:cases`**: Scrape, refresh, or update case details on the platform. *(Lawyer, Admin)*
-* **`read:documents`**: View court-related documents or uploaded case summaries. *(Client, Lawyer, Admin)*
-* **`write:documents`**: Upload new PDFs or evidentiary case files. *(Lawyer, Admin)*
-* **`read:courtStructure`**: Retrieve listing guides for states, districts, and establishments. *(Client, Lawyer, Admin)*
-* **`read:recentSearches`** / **`delete:recentSearches`**: Access or clear the history of search terms. *(Client, Lawyer, Admin)*
-
-### 2. API Credentials & Analytics
-* **`read:apiKeys`** / **`write:apiKeys`** / **`delete:apiKeys`**: Manage programmatic access credentials. *(Client, Lawyer, Admin)*
-* **`read:analytics`**: Retrieve personal endpoint usage statistics. *(Client, Lawyer, Admin)*
-* **`write:analytics`**: Configure advanced analytical dashboards or export metrics. *(Lawyer, Admin)*
-
-### 3. Credit Pool & Wallet
-* **`read:wallet`** / **`write:wallet`**: Query credit balance, top-up histories, and verify Razorpay orders. *(Client, Lawyer, Admin)*
-* **`read:billing`**: Retrieve invoices and billing receipts. *(Client, Lawyer, Admin)*
-* **`read:packages`** / **`read:plans`**: View available credit tiers and subscription models. *(Client, Lawyer, Admin)*
-* **`read:subscriptions`** / **`write:subscriptions`**: Initiate, cancel, or switch recurring plans. *(Client, Lawyer, Admin)*
+* **`cases:read`**: Permission to search cases and query case details or court structures. *(Allowed for: Client, Lawyer, Admin)*
+* **`cases:write`**: Permission to trigger live scraper refreshes on cases. *(Allowed for: Lawyer, Admin)*
+* **`api-keys:read` / `api-keys:write`**: Permission to view, create, rotate, or revoke your API Keys. *(Allowed for: Client, Lawyer, Admin)*
+* **`wallet:read`**: Permission to check prepaid credit balance and transaction logs. *(Allowed for: Client, Lawyer, Admin)*
 
 ---
 
