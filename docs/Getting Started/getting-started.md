@@ -19,12 +19,11 @@ Welcome to the **Court Record Platform API**! This API allows developers to prog
 
 ## Base URLs
 
-The API is versioned to ensure stability. Base URLs are relative to your deployment domain:
+The API is versioned to ensure stability. The base URL for all programmatic requests is:
 
 | Version | Base URL | Description |
 | :--- | :--- | :--- |
-| **Version 1** | `https://api.yourcompany.com/api/v1` | Main stable version for current features. |
-| **Version 2** | `https://api.yourcompany.com/api/v2` | Advanced version containing breaking changes (e.g. restructured user data model). |
+| **Version 1** | `https://api.yourcompany.com/api/v1` | Main stable version for all public features. |
 
 ---
 
