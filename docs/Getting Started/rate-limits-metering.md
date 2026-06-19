@@ -4,7 +4,7 @@ excerpt: >-
   To ensure platform reliability and fair credit usage, all API requests are
   subject to rate limiting and credits-based metering.
 deprecated: false
-hidden: false
+hidden: true
 metadata:
   robots: index
 ---
