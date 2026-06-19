@@ -14,10 +14,9 @@ metadata:
 
 The API is versioned to ensure stability. Base URLs are relative to your deployment domain:
 
-| Version       | Base URL                             | Description                                                                       |
-| :------------ | :----------------------------------- | :-------------------------------------------------------------------------------- |
-| **Version 1** | `https://api.yourcompany.com/api/v1` | Main stable version for current features.                                         |
-| **Version 2** | `https://api.yourcompany.com/api/v2` | Advanced version containing breaking changes (e.g. restructured user data model). |
+| Version       | Base URL                             | Description                               |
+| :------------ | :----------------------------------- | :---------------------------------------- |
+| **Version 1** | `https://api.yourcompany.com/api/v1` | Main stable version for current features. |
 
 ***
 
