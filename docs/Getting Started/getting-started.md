@@ -28,60 +28,24 @@ The API is versioned to ensure stability. Base URLs are relative to your deploym
 
 ---
 
-## Basic Workflow
+## Basic Integration Workflow
 
-Integrating with the API typically involves these steps:
+Integrating with the Court Record Platform typically involves these simple steps:
 
 ```mermaid
 graph TD
-    A[Get Credentials] --> B[Authenticate]
-    B --> C[Verify Wallet Balance]
-    C --> D[Run Case Search]
-    D --> E[Fetch Case Detail / CNR]
+    A[Generate API Key in Portal] --> B[Verify Wallet Balance]
+    B --> C[Run Case Search]
+    C --> D[Fetch Case Detail / CNR]
 ```
 
-### 1. Register & Login (For Web/Portal Apps)
-If you are building a web application using user credentials, first register and authenticate to get your session token:
-
-```bash
-curl -X POST https://api.yourcompany.com/api/v1/auth/register \
-  -H "Content-Type: application/json" \
-  -d '{
-    "email": "developer@example.com",
-    "password": "SecurePassword123!",
-    "firstName": "John",
-    "lastName": "Doe"
-  }'
-```
-
-After verifying the OTP sent to your email, log in to set HTTP-only authentication cookies:
-
-```bash
-curl -X POST https://api.yourcompany.com/api/v1/auth/login \
-  -H "Content-Type: application/json" \
-  -d '{
-    "email": "developer@example.com",
-    "password": "SecurePassword123!"
-  }'
-```
-
-### 2. Generate API Keys (For Programmatic/Server Apps)
-If you are building server-side automation tools, log into the developer portal, go to your Profile settings, and call the API Key generation endpoint to get your API Token:
-
-```bash
-curl -X POST https://api.yourcompany.com/api/v1/api-keys \
-  -H "Authorization: Bearer <your_jwt_token>" \
-  -H "Content-Type: application/json" \
-  -d '{
-    "name": "Production Automation Key",
-    "scopes": ["cases:read", "cases:write"]
-  }'
-```
+### 1. Generate API Key
+To authenticate your programmatic requests, log in to the developer portal dashboard using your credentials, navigate to **Settings > API Keys**, and generate a new API Key with the required scopes (e.g., `cases:read`).
 
 > [!WARNING]
 > Copy the returned `plainKey` immediately. It is only shown once at creation and cannot be retrieved again.
 
-### 3. Make Your First Query
+### 2. Make Your First Query
 Use your API Key (passed as a Bearer token in the `Authorization` header) to run a case search:
 
 ```bash
