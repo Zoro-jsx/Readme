@@ -60,4 +60,3 @@ Once authentication is working, the natural progression is:
 1. Use [Case Search](reference/case-search) to locate cases by party name, advocate, judge, or FIR number
 2. Use [Case Detail](reference/case-detail) with a `cnrNumber` from search results to retrieve the full case record
 3. Use [Case Refresh](reference/case-refresh) to keep case data current for cases you are actively monitoring
-4. Review [Credits & Billing](credits-and-billing) to understand how API usage is metered
