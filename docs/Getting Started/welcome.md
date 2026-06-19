@@ -22,26 +22,27 @@ Welcome to the official developer hub for the **Court Record Platform**! Our API
 
 Get started with your integration using these resources:
 
-:::row
-:::col
-### 🚀 [Getting Started](docs/getting-started)
-Learn the basic workflow, set up your development environment, and make your first API request.
-:::
-:::col
-### 🔑 [Authentication](docs/authentication)
-Authenticate using Bearer JWT tokens for web portals, or secure API Keys for programmatic background scripts.
-:::
-:::
-:::row
-:::col
-### ⚡ [Rate Limits & Metering](docs/rate-limits)
-Understand request rate limits, credit pools (subscription vs top-up), and the credit rate per API call.
-:::
-:::col
-### 🔍 [Search Syntax](docs/search-syntax)
-Master the search parameters, required conditions, and court filtering rules for case searches.
-:::
-:::
+<div style="display: flex; flex-direction: row; gap: 20px; flex-wrap: wrap; margin-bottom: 20px;">
+  <div style="flex: 1; min-width: 250px; border: 1px solid rgba(120, 120, 120, 0.2); border-radius: 8px; padding: 16px; background-color: rgba(120, 120, 120, 0.05);">
+    <h3 style="margin-top: 0;">🚀 <a href="/docs/getting-started">Getting Started</a></h3>
+    <p style="margin-bottom: 0;">Learn the basic workflow, set up your development environment, and make your first API request.</p>
+  </div>
+  <div style="flex: 1; min-width: 250px; border: 1px solid rgba(120, 120, 120, 0.2); border-radius: 8px; padding: 16px; background-color: rgba(120, 120, 120, 0.05);">
+    <h3 style="margin-top: 0;">🔑 <a href="/docs/authentication">Authentication</a></h3>
+    <p style="margin-bottom: 0;">Authenticate using Bearer JWT tokens for web portals, or secure API Keys for programmatic background scripts.</p>
+  </div>
+</div>
+<div style="display: flex; flex-direction: row; gap: 20px; flex-wrap: wrap; margin-bottom: 20px;">
+  <div style="flex: 1; min-width: 250px; border: 1px solid rgba(120, 120, 120, 0.2); border-radius: 8px; padding: 16px; background-color: rgba(120, 120, 120, 0.05);">
+    <h3 style="margin-top: 0;">⚡ <a href="/docs/rate-limits-metering">Rate Limits & Metering</a></h3>
+    <p style="margin-bottom: 0;">Understand request rate limits, credit pools (subscription vs top-up), and the credit rate per API call.</p>
+  </div>
+  <div style="flex: 1; min-width: 250px; border: 1px solid rgba(120, 120, 120, 0.2); border-radius: 8px; padding: 16px; background-color: rgba(120, 120, 120, 0.05);">
+    <h3 style="margin-top: 0;">🔍 <a href="/docs/search-syntax">Search Syntax</a></h3>
+    <p style="margin-bottom: 0;">Master the search parameters, required conditions, and court filtering rules for case searches.</p>
+  </div>
+</div>
+
 
 ---
 
