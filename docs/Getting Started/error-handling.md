@@ -5,7 +5,7 @@ excerpt: >-
   the success or failure of an API request. In addition, error responses contain
   a structured JSON body to help developers debug issues.
 deprecated: false
-hidden: false
+hidden: true
 metadata:
   robots: index
 ---
